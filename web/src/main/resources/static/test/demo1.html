@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="form1" action="">
+    <label>
+        <span>用户名</span>
+        <input type="text" id="username" name="uname1"/>
+    </label>
+   <!-- <label>
+        <span>密码</span><label id="ErrorTel"></label>
+        <input type="text" id="password" name="password"/>
+    </label>
+    <label>
+        <span>年龄</span>
+        <input type="text" id="age" name="age"/>
+    </label>
+-->
+    <button type="submit" class="submit">注 册</button>
+</form>
+<input type="button" id="btn"/>
+</body>
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/jsonHandler.js"></script>
+<script>
+    $(function () {
+        function checkUsername() {
+            //1.获取账号的值
+            var utel = $("#username").val();
+            //2.定义正则
+            var reg_tel = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+            //3.判断，给出提示
+            var flag = reg_tel.test(utel);
+            if (flag) {
+                $("#ErrorTel").text("");
+            } else {
+                $("#ErrorTel").text("内容错误");
+            }
+            return flag;
+        }
+
+        function checkName() {
+            //1.获取账号的值
+         /*   var strdata = $("#username").serializeObject();*/
+            var utel = $("#username").val();
+            /*var str = JSON.stringify(strdata);*/
+
+            //ajax传输查询数据库
+            $.post("/testAjax1",{uname1:$("#username").val()},function (data) {
+                var flag=data.msg;
+                alert();
+                alert(flag);
+                if (data.msg == 'yes'){
+                    alert("有重复");
+                    return false;
+                }else {
+                    alert("无重复");
+                    return true;
+                }
+
+            })
+        }
+
+        /*//校验密码
+        function checkPassword() {
+            //1.获取密码值
+            var password = $("#password").val();
+            //2.定义正则
+            var reg_password = /^\w{8,20}$/;
+            //3.判断，给出提示信息
+            var flag = reg_password.test(password);
+            if (flag) {
+                //密码合法
+                $("#password").css("border", "");
+            } else {
+                //密码非法,加一个红色边框
+                $("#password").css("border", "1px solid red");
+            }
+            return flag;
+        }
+*/
+        /*//校验邮箱
+        function checkEmail() {
+            //1.获取邮箱
+            var email = $("#email").val();
+            //2.定义正则
+            var reg_email = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            //3.判断
+            var flag = reg_email.test(email);
+            if (flag) {
+                $("#email").css("border", "");
+            } else {
+                $("#email").css("border", "1px solid red");
+            }
+            return flag;
+        }*/
+
+        //表单提交发送数据
+        $(function () {
+            $("#form1").submit(function () {
+                // var json1='{"username":"hehe","password":"123","age":30}';
+                // var json1 = $(this).serialize();
+                if (checkUsername()  /*&& checkPassword()*/&&checkName()) {
+                    var strdata = $("#form1").serializeObject();
+                    var str = JSON.stringify(strdata);//转换成string数据
+
+                    $.ajax({
+                        // 编写json格式，设置属性和值
+                        url: "/testAjax",
+                        contentType: "application/json;charset=UTF-8",
+                        data: str,
+                        dataType: "json",
+                        type: "post",
+                        success: function (data) {
+                            // data服务器端响应的json的数据，进行解析
+                            alert(data);
+                            alert(data.username);
+                            alert(data.password);
+                            alert(data.age);
+                        }
+                    });
+                }
+            });
+            $("#username").blur(checkUsername&&checkName);
+          /*  $("#password").blur(checkPassword);*/
+         /*   $("#age").blur(checkEmail);*/
+
+        })
+    })
+</script>
+</html>
