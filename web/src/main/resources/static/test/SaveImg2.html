@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax上传文件</title>
+    <style>
+        img[src=""],img:not([src]){
+            opacity:0;
+        }
+    </style>
+    <script src="js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<!--用户名：<input id="username" type="text"><br>-->
+用户图像：<a href="javascript:void(0)" onclick="uploadPhoto()">选择图片</a>
+<input type="file" id="photoFile" style="display: none;" onchange="upload()">
+<img id="preview_photo" src="" width="200px" height="200px">
+<script>
+    function uploadPhoto() {
+        $("#photoFile").click();
+    }
+
+    /**
+     * 上传图片
+     */
+    function upload() {
+        if ($("#photoFile").val() == '') {
+            return;
+        }
+        var formData = new FormData();
+        formData.append('photo', document.getElementById('photoFile').files[0]);
+        $.ajax({
+            url:"/saveImg",
+            type:"post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+
+                 json = JSON.parse(data);
+                alert(json.filepath+json.filename);
+                if (json.type == "success") {
+                    $("#preview_photo").attr("src", "/petImage/"+json.filename);
+                    $("#productImg").val(json.filename);
+                } else {
+                    alert(json.msg);
+                    alert(json.filepath);
+                }
+            },
+            error:function(data) {
+                alert("上传失败")
+            }
+        });
+    }
+</script>
+</body>
+</html>
