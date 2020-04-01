@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lijin.entity.User;
 import com.lijin.service.UserService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-
-
-
-
-
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
@@ -44,16 +38,17 @@ public class UserController {
     @RequestMapping(value = "regist", method = {RequestMethod.POST})
     public @ResponseBody
     String userRegister(@RequestBody User user) {
+
         boolean b = userService.saveUser(user);
         JSONObject jo = new JSONObject();
         System.out.println(user.toString());
+        System.out.println("注册方法执行，传递的参数为"+JSONObject.toJSONString(user));
         if (b) {
-            jo.put("msg", "yes");
+            return JSONObject.toJSONString(user);
         } else {
             jo.put("msg", "no");
+            return jo.toString();
         }
-        System.out.println(jo.toString());
-        return jo.toString();
     }
 
 
@@ -83,36 +78,21 @@ public class UserController {
     public @ResponseBody
     String checkLogin(String utel, String upass, HttpServletResponse response) throws JsonProcessingException {
         System.out.println("登录方法执行了...");
-
-
         //通过电话和密码查询用户
         User user = userService.login(utel, upass);
-        Cookie cookie = new Cookie("cookieUser",  user.getUname());
-        System.out.println("cookie已写入");
+        /*Cookie cookie = new Cookie("cookieUser",  user.getUname());
         cookie.setMaxAge(0);
         cookie.setMaxAge(7 * 24 * 60 * 60);//设置cookie的最大生命周期为一周
         cookie.setPath("/");    //设置路径为全路径（这样写的好处是同一项目下的页面都可以访问该cookie）
-        response.addCookie(cookie);
+        response.addCookie(cookie);*/
         JSONObject jo = new JSONObject();
-        boolean b;
-        if (user != null) {
-            b = true;
-        } else {
-            b = false;
-        }
-        // 做响应，查询数据库
-        if (b) {
-            jo.put("msg", "yes");
-        } else {
-            jo.put("msg", "no");
-        }
-        System.out.println(jo.toString());
-        return jo.toString();
+        System.out.println("返回到前端的用户数据为"+JSONObject.toJSONString(user));
+        return JSONObject.toJSONString(user);
     }
 
     //判断用户是否在线,
     //注解方式获取cookie中对应的key值
-    @CrossOrigin
+    /*@CrossOrigin
     @RequestMapping(value = "findOne", method = {RequestMethod.POST})
     public @ResponseBody
     String finOne(@CookieValue("cookieUser") String cookieUser) throws IOException {
@@ -121,10 +101,10 @@ public class UserController {
             jo.put("uname",cookieUser);
         System.out.println("此方法传递到前端的内容是"+jo.toString());
         return  jo.toString();
-    }
+    }*/
 
     //退出在线
-    @RequestMapping(value = "logOut", method = {RequestMethod.POST})
+   /* @RequestMapping(value = "logOut", method = {RequestMethod.POST})
     public String logOut(HttpServletResponse response, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         JSONObject jo = new JSONObject();
@@ -138,6 +118,6 @@ public class UserController {
             }
         }
         return jo.toString();
-    }
+    }*/
 
 }

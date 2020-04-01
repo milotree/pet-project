@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Marten - Pet Food eCommerce Bootstrap4 Template</title>
+    <title>千宠网 - Pet Food eCommerce Bootstrap4 Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -712,35 +712,12 @@
 <script src="assets/js/plugins.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/loginout.js"></script>
+<script src="assets/js/cookie.js"></script>
 <a id="scrollUp" href="#top" style="display: none; position: fixed; z-index: 2147483647;"><i
         class="ti-arrow-up"></i></a>
 
 <script type="text/javascript">
     var rename = false;
-
-    /*//检测是否已有账号登录
-    $(function () {
-        $.post("/user/findOne", {}, function (data) {
-
-                var msg = "欢迎回来" + data.uname;
-                $("#loginOnline").html(msg + "<a id='logout'>退出</a>");
-
-        });
-    });
-
-    $(function () {
-        $("#logout").click(function () {
-            $.post("/user/logOut", {}, function (data) {
-                if (data.msg == 'no') {
-                    $("#loginOnline").html('<a href="login-register.html"><i class="icon-user icons" class="mega-menu-position">\n' +
-                        '                            </i></a>');
-                    location.href = "index.html";
-                } else {
-                    alert("退出失败");
-                }
-            })
-        })
-    })*/
 
     function checkTel() {
         //1.获取账号的值
@@ -861,8 +838,13 @@
             $.post("/user/checkLogin",
                 {utel: $("#logTel").val(), upass: $("#password").val()},
                 function (data) {
-                    if (data.msg == 'yes') {
+
+                    if (data.uname != null) {
                         $("#logError").html("");
+                        cookie.setCookie("uname",data.uname,500);
+                        cookie.setCookie("utel",data.utel,500);
+                        cookie.setCookie("uemail",data.uemail,500);
+                        cookie.setCookie("uid",data.uid,500);
                         location.href="index.html";
                     } else {
                         $("#logError").html("<font color='red' style='font-size: 12px;'>账号或密码错误</font>");
@@ -893,7 +875,11 @@
                     dataType: "json",
                     type: "post",
                     success: function (data) {
-                        if (data.msg == 'yes') {
+                        if (data.uname != null ) {
+                            cookie.setCookie("uname",data.uname,500);
+                            cookie.setCookie("utel",data.utel,500);
+                            cookie.setCookie("uemail",data.uemail,500);
+                            cookie.setCookie("uid",data.uid,500);
                             location.href="index.html";
                         } else {
                             $("#errorMsg").text("注册失败");
