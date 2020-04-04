@@ -12,7 +12,6 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @SpringBootApplication
-@ComponentScan("com.lijin.service")
 public class UserService {
     @Autowired
     private UserDao userDao;

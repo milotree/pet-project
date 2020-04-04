@@ -3,21 +3,11 @@ package com.lijin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lijin.entity.User;
 import com.lijin.service.UserService;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 @RestController
@@ -38,7 +28,6 @@ public class UserController {
     @RequestMapping(value = "regist", method = {RequestMethod.POST})
     public @ResponseBody
     String userRegister(@RequestBody User user) {
-
         boolean b = userService.saveUser(user);
         JSONObject jo = new JSONObject();
         System.out.println(user.toString());
@@ -76,7 +65,7 @@ public class UserController {
     @RequestMapping(value = "checkLogin", method = {
             RequestMethod.POST}, produces = "application/json;charset=UTF-8")
     public @ResponseBody
-    String checkLogin(String utel, String upass, HttpServletResponse response) throws JsonProcessingException {
+    String checkLogin(String utel, String upass) throws JsonProcessingException {
         System.out.println("登录方法执行了...");
         //通过电话和密码查询用户
         User user = userService.login(utel, upass);

@@ -1,4 +1,4 @@
-package com.lijin.web;
+package com.lijin.filter;
 
 import com.lijin.controller.Img2Controller;
 import org.springframework.context.annotation.Configuration;

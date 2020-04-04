@@ -1,4 +1,4 @@
-package com.lijin.fileter;
+package com.lijin.filter;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;

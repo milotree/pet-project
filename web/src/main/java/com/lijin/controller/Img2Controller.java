@@ -2,13 +2,8 @@ package com.lijin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lijin.service.ImgService;
-import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,20 +12,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class Img2Controller {
     @Autowired
     private ImgService imgService;
-    public  String realPath;
+    public String realPath;
     public void setImgService(ImgService imgService) {
         this.imgService = imgService;
     }
     @RequestMapping(value = "saveImg",method = RequestMethod.POST)
     @ResponseBody
-    public String saveImg(MultipartFile photo, HttpServletRequest request) throws FileUploadException {
+    public String saveImg(MultipartFile photo){
         JSONObject jo = new JSONObject();
         if (photo == null) {
             jo.put("type", "error");

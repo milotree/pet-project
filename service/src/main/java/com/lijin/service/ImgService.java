@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("com.lijin.service")
+//@ComponentScan("com.lijin.service")
 public class ImgService {
     @Autowired
     private ImgDao imgDao;

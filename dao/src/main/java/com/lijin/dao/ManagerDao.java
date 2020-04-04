@@ -11,4 +11,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * *封装了复杂查询（分页）
  */
 public interface ManagerDao extends JpaRepository<Manager,Integer>, JpaSpecificationExecutor<Manager> {
+    Manager findByMnameAndMpass(String mname,String mpass);
 }

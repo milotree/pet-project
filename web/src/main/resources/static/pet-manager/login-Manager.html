@@ -1,0 +1,69 @@
+<!doctype html>
+<html  class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录-X-admin2.2</title>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/xadmin.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script src="lib/layui/layui.js" charset="utf-8"></script>
+    <script src="js/loginAndOut.js"></script>
+    <script src="js/cookie.js"></script>
+
+</head>
+<body class="login-bg">
+    
+    <div class="login layui-anim layui-anim-up">
+        <div class="message">管理员登录</div>
+        <div id="darkbannerwrap"></div>
+        
+        <form  class="layui-form" >
+            <input name="mname" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <hr class="hr15">
+            <input name="mpass" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+            <hr class="hr15">
+            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <hr class="hr20" >
+        </form>
+    </div>
+
+    <script>
+        $(function  () {
+            layui.use('form', function(){
+              var form = layui.form;
+              var upload = layui.upload; //得到 upload 对象
+
+              //监听提交
+              form.on('submit(login)', function(data){
+                  var json = JSON.stringify(data.field);//json格式所有表单的值
+                  //创建一个上传组件
+                  $.ajax({
+                      type:'post',
+                      contentType: "application/json;charset=UTF-8",
+                      url:'/manager/login',
+                      dataType: "json",
+                      data:json,
+                      success: function (data) {
+                          if(data.mname!=null){//判断用户数据是否接受
+                              cookie.setCookie("mname1",data.mname,500);
+                              location.href="index.html";
+                          }else {
+                              alert("登录失败");
+                          }
+                      },
+                      error:function () {
+                        alert("登录失败");
+                      }
+                  })
+
+                return false;
+              });
+            });
+        })
+    </script>
+    <!-- 底部结束 -->
+
+</body>
+</html>
