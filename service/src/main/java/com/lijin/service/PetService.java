@@ -25,16 +25,36 @@ public class PetService {
         return (save == null) ? false : true;
     }
 
-    public List<Pet> findAll() {
-        List<Pet> all = petDao.findAll();
-        return all;
-    }
-    public List<PetAndSaler> findPetsAndSalers(){
+    ///////////////查询所有宠物信息
+    public List<PetAndSaler> findPetsAndSalers() {
         List<PetAndSaler> petsAndSaler = petDao.getPetsAndSaler();
         return petsAndSaler;
     }
 
-    public void delPet(Integer id){
+    /////////////////删除宠物信息
+    public void delPet(Integer id) {
         petDao.deleteById(id);
     }
+
+    ///////////////带条件查询多个宠物信息（id）
+    public PetAndSaler searchOneByCondition(Integer id){
+        PetAndSaler petAndSaler = petDao.getOnePetId(id);
+        return petAndSaler;
+    }
+    ///////////////带条件查询多个宠物信息（id）
+    public List<PetAndSaler> searchByCondition(Integer id){
+        List<PetAndSaler> petAndSalers = petDao.getByPetId(id);
+        return petAndSalers;
+    }
+    ///////////////带条件查询多个宠物信息（type）
+    public List<PetAndSaler> searchByCondition(String ptype){
+        List<PetAndSaler> petAndSalers = petDao.getByPetId(ptype);
+        return petAndSalers;
+    }
+    ///////////////带条件查询多个宠物信息（id+type）
+    public List<PetAndSaler> searchByCondition(Integer id,String ptype){
+        List<PetAndSaler> petAndSalerList = petDao.getByPetId(id, ptype);
+        return petAndSalerList;
+    }
+
 }

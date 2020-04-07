@@ -24,13 +24,14 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <form class="layui-form layui-col-space5">
+                    <form class="layui-form layui-col-space5" id="myform">
                         <div class="layui-input-inline layui-show-xs-block">
-                            <input type="text" name="id" placeholder="ID" autocomplete="off" class="layui-input">
+                            <input type="text" id="petid" name="id" placeholder="ID" autocomplete="off"
+                                   class="layui-input">
                         </div>
 
                         <div class="layui-input-inline layui-show-xs-block">
-                            <select name="contrller">
+                            <select name="ptype" id="ptype">
                                 <option>类别</option>
                                 <option>犬</option>
                                 <option>猫</option>
@@ -41,7 +42,7 @@
                         </div>
 
                         <div class="layui-input-inline lafite_search layui-show-xs-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                            <button class="layui-btn" lay-submit lay-filter="sreach" type="submit">
                                 查询
                             </button>
                             <button class="layui-btn lafite_blue_btn" type="reset" lay-submit="">
@@ -75,39 +76,8 @@
                         </tr>
                         </thead>
                         <tbody id="pets">
-                    <!--     通过ajax获取数据     -->
-                      <!--  <tr>
-                            <td>
-                                <input type="checkbox" name="id" value="1" lay-skin="primary">
-                            </td>
-                            <td>1</td>
-                            <td>小dsdsdsdfdfsdfafd防守打法是否的法第三方士大夫d明</td>
+                        <!--     通过ajax获取数据     -->
 
-                            <td>已发布</td>
-                            <td>
-                                <img src="./images/demo.jpg"/>
-                            </td>
-                            <td>张三</td>
-                            <td>张三</td>
-                            <td>张三</td>
-                            <td>张三</td>
-                            <td>张三</td>
-                            <td class="td-manage lafite_table_a_blue">
-                                <a title="编辑" class="" onclick="parent.xadmin.add_tab('编辑广告位','add_adsense.html')"
-                                   href="javascript:;">
-                                    编辑
-                                </a>
-                                &lt;!&ndash;<a class="lafite_margin_left_10px" onclick="member_stop(this,'10001')"
-                                   href="javascript:;" title="上架">
-                                    <span>下架</span>
-                                </a>&ndash;&gt;
-                                <a class="lafite_margin_left_10px" title="删除" onclick="member_del(this,'要删除的id')"
-                                   href="javascript:;">
-                                    删除
-                                </a>
-                            </td>
-                        </tr>
-                       -->
                     </table>
                 </div>
 
@@ -118,9 +88,12 @@
 </div>
 </body>
 <script>
+
     $(function () {
         initLayPage();
-    })
+
+    });
+
     //初始化分页数据
     function initLayPage(pageConf) {
         if (!pageConf) {
@@ -130,6 +103,7 @@
 
         }
 
+
         layui.use(['laypage', 'laydate', 'form'], function () {
             var $ = layui.jquery;
             var laydate = layui.laydate;
@@ -138,9 +112,7 @@
 
 
             $.post("/manager/findAllPet", pageConf, function (data) {
-
                 //******************************分页数据
-
                 // 分页样式
                 laypage.render({
                     elem: 'lafite_pages'               //这是元素的id，不能写成"#lafite_pages"
@@ -169,8 +141,45 @@
                 });
 
 
-
             }, "json");
+
+
+            //创建一个上传组件
+            $("#myform").submit(function () {
+                $.post("/manager/searchBy", {
+                    ptype: $("#ptype option:selected").val(),
+                    pid: $("#petid").val()
+                }, function (data) {
+                    // fillTable(data, (pageConf.currentPage - 1) * pageConf.pageSize); //页面填充
+                    laypage.render({
+                        elem: 'lafite_pages'               //这是元素的id，不能写成"#lafite_pages"
+                        , count: data.length            //数据总数
+                        , limit: pageConf.pageSize         //每页显示条数
+                        , limits: [5, 10, 20]
+                        , curr: pageConf.currentPage
+                        , groups: 5                      //连续页码个数
+                        , prev: '上一页'                 //上一页文本
+                        , netx: '下一页'                 //下一页文本
+                        , first: "首页"                      //首页文本
+                        , last: "尾页"
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , theme: '#D91715',
+                        jump: function (obj, first) {
+                            //渲染
+                            if (!first) {
+                                pageConf.currentPage = obj.curr;
+                                pageConf.pageSize = obj.limit;
+                                initLayPage(pageConf);
+                            }
+
+                            thisData = data.concat().splice(obj.curr * obj.limit - obj.limit, obj.limit);
+                            fillTable(thisData, (pageConf.currentPage - 1) * pageConf.pageSize); //页面填充
+                        }
+                    });
+                }, "json")
+                return false;
+            })
+
 
 //-------------------填充表格数据
             function fillTable(data, num) {
@@ -199,7 +208,7 @@
                         + "<td>" + getLocalTime(data[i].ptime).substring(0, 8) + "</td>"
                         + "<td>" + data[i].sname + "</td>"
                         + " <td class=\"td-manage lafite_table_a_blue\">\n" +
-                        "                                <a title=\"编辑\" class=\"\" onclick=\"parent.xadmin.add_tab('编辑广告位','add_adsense.html')\"\n" +
+                        "                                <a title=\"编辑\" class=\"\" onclick=\"change(" + data[i].id + ")\"\n" +
                         "                                   href=\"javascript:;\">\n" +
                         "                                    编辑\n" +
                         "                                </a>\n" +
@@ -207,7 +216,7 @@
                         "                                   href=\"javascript:;\" title=\"上架\">\n" +
                         "                                    <span>下架</span>\n" +
                         "                                </a>-->\n" +
-                        "                                <a class=\"lafite_margin_left_10px\" title=\"删除\" onclick=\"member_del(this,"+data[i].id+")\"\n" +
+                        "                                <a class=\"lafite_margin_left_10px\" title=\"删除\" onclick=\"member_del(this," + data[i].id + ")\"\n" +
                         "                                   href=\"javascript:;\">\n" +
                         "                                    删除\n" +
                         "                                </a>\n" +
@@ -231,14 +240,26 @@
             });
 
         });
-        }
+    }
+
     function member_del(obj, id) {
-        layer.confirm('确认要删除吗',{btn: ['确定', '取消'],title:"提示"},function () {
-            $.post("/manager/petDel",{pid:id},function (data) {
-                    location.href="adsense.html";
+        layer.confirm('确认要删除吗', {btn: ['确定', '取消'], title: "提示"}, function () {
+            $.post("/manager/petDel", {pid: id}, function (data) {
+                location.href = "adsense.html";
             })
         });
 
     }
+
+    function change(id) {
+        alert("编辑时间触发");
+        // $.post("/manager/change", {pid: id}, function (data) {
+          //以下方式将数据储存到localStorage中
+          //   JSON.parse(data);
+          //   localStorage.setItem(id,data);
+            location.href="fix_adsense.html?pid="+id;
+        // }, "json");
+    }
+
 </script>
 </html>
