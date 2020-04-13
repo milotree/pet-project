@@ -20,7 +20,7 @@ public interface PetDao extends JpaRepository<Pet,Integer>, JpaSpecificationExec
         //查询所有宠物和对应卖家信息
     @Query(value = "select new com.lijin.entity.PetAndSaler(b.id,b.ptype,b.page,b.paddress,b.pprice,b.pnum,b.ptime,b.pimg,b.pname,a.sname,a.swechat)"
     +"from Pet b left join Saler a on b.saler.sid = a.sid")
-    List<PetAndSaler> getPetsAndSaler(/*@Param("scheduleId") Long scheduleId*/);
+    List<PetAndSaler> getPetsAndSaler();
 
     //删除用户
     void deleteById(Integer id);
@@ -40,4 +40,6 @@ public interface PetDao extends JpaRepository<Pet,Integer>, JpaSpecificationExec
     @Query(value = "select new com.lijin.entity.PetAndSaler(b.id,b.ptype,b.page,b.paddress,b.pprice,b.pnum,b.ptime,b.pimg,b.pname,a.sname,a.swechat)"
             +"from Pet b left join Saler a on b.saler.sid = a.sid where b.id = :id and b.ptype = :ptype ")
     List<PetAndSaler> getByPetId(@Param("id") Integer id,@Param("ptype") String ptype);
+
+
 }

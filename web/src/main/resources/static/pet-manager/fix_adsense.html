@@ -173,10 +173,8 @@
         $("#salers").append("<option value=''></option>");
         if (data != null) {
             for (var i = 0; i < data.length; i++) {
-                // content += ;
                 $("#salers").append("<option value=" + data[i].sname + ">" + data[i].sname + "</option>");
             }
-            /*.html(content);*/
         }
     }, "json");
     $.ajaxSettings.async = true;
@@ -185,16 +183,24 @@
     var thisid = getUrlParam("pid");
     $(function () {
         $.post("/manager/change", {pid: thisid}, function (data) {
-            alert(data.id);
-            //获取select下拉框的所有值
-            $("#ptype").find("option[value = '" + data.ptype + "']").attr("selected", "selected");
-            $("#salers").find("option[value = '" + data.sname + "']").attr("selected", "selected");
-            $("#page").find("option[value = '" + data.page + "']").attr("selected", "selected");
+
+            //常规获取select下拉框的所有值 ！！！！！！都没用！！
+            // $("#ptype").find("option[value = '" + data.ptype + "']").prop("selected",true);
+            //$("#ptype").val("猫").prop("selected",true);
+
+
+            //这样才正确
+            var select1 = 'dd[lay-value=' + data.ptype + ']';
+            $('#ptype').siblings("div.layui-form-select").find('dl').find(select1).click();
+            var select2 = 'dd[lay-value=' + data.sname + ']';
+            $('#salers').siblings("div.layui-form-select").find('dl').find(select2).click();
+            var select3 = 'dd[lay-value=' + data.page + ']';
+            $('#page').siblings("div.layui-form-select").find('dl').find(select3).click();
+
             $("#pnum").val(data.pnum);
             $("#pname").val(data.pname);
             $("#paddress").val(data.paddress);
             $("#pprice").val(data.pprice);
-            // alert("真正的时间是" + new Date(data.ptime * 1000).getDate());
             var thismonth = new Date(data.ptime * 1000).getMonth() + 1;
             if (thismonth < 10) {
                 var month = ("0" + thismonth).slice(-2);
@@ -256,7 +262,7 @@
                         ptime: Date.parse($("#ptime").val())
                     },
                     function (data) {
-                        location.href="adsense.html";
+                        location.href = "adsense.html";
                     })
                 return false;
             })

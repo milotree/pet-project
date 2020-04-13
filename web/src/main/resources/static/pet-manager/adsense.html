@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="./css/xadmin.css">
     <script src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
-    <script type="text/javascript" src="js/TimeChange.js"></script>
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/getTime.js"></script>
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -64,6 +64,7 @@
 
                             <th>ID</th>
                             <th>类别</th>
+                            <th>名字</th>
                             <th>年龄</th>
                             <th>图片</th>
                             <th>地址</th>
@@ -91,7 +92,6 @@
 
     $(function () {
         initLayPage();
-
     });
 
     //初始化分页数据
@@ -196,26 +196,25 @@
                     } else {
                         age = "三年+";
                     }
+
                     var img = data[i].pimg.substring(data[i].pimg.length - 36);
                     petstr += "<tr>"
                         + "<td>" + data[i].id + "</td>"
                         + "<td>" + data[i].ptype + "</td>"
+                        + "<td>" + data[i].pname + "</td>"
                         + "<td>" + age + "</td>"
                         + "<td> <img src='/petImage/" + img + "'/></td>"
                         + "<td>" + data[i].paddress + "</td>"
                         + "<td>" + data[i].pnum + "</td>"
                         + "<td>" + data[i].pprice + "</td>"
-                        + "<td>" + getLocalTime(data[i].ptime).substring(0, 8) + "</td>"
+                        + "<td>" + timeDate(data[i].ptime) + "</td>"
                         + "<td>" + data[i].sname + "</td>"
                         + " <td class=\"td-manage lafite_table_a_blue\">\n" +
                         "                                <a title=\"编辑\" class=\"\" onclick=\"change(" + data[i].id + ")\"\n" +
                         "                                   href=\"javascript:;\">\n" +
                         "                                    编辑\n" +
                         "                                </a>\n" +
-                        "                                <!--<a class=\"lafite_margin_left_10px\" onclick=\"member_stop(this,'10001')\"\n" +
-                        "                                   href=\"javascript:;\" title=\"上架\">\n" +
-                        "                                    <span>下架</span>\n" +
-                        "                                </a>-->\n" +
+                        "                                </a>\n" +
                         "                                <a class=\"lafite_margin_left_10px\" title=\"删除\" onclick=\"member_del(this," + data[i].id + ")\"\n" +
                         "                                   href=\"javascript:;\">\n" +
                         "                                    删除\n" +

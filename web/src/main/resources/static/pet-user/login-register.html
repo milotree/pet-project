@@ -192,7 +192,7 @@
                                         <li>
                                             <a href="product-details.html">
                                                 <font style="vertical-align: inherit;">
-                                                    <font style="vertical-align: inherit;">产品详情</font>
+                                                    <font style="vertical-align: inherit;">宠物详情</font>
                                                 </font>
                                             </a>
                                         </li>
@@ -240,11 +240,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="blog.html">
-                                    <font style="vertical-align: inherit;">
-                                        <font style="vertical-align: inherit;">博客</font>
-                                    </font>
-                                </a>
+
 
                                 </li>
                                 <li><a href="about-us.html">
@@ -413,7 +409,7 @@
                                         <li>
                                             <a href="product-details.html">
                                                 <font style="vertical-align: inherit;">
-                                                    <font style="vertical-align: inherit;">产品详情</font>
+                                                    <font style="vertical-align: inherit;">宠物详情</font>
                                                 </font>
                                             </a>
                                         </li>
@@ -568,13 +564,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="blog.html">
-                                    <font style="vertical-align: inherit;">
-                                        <font style="vertical-align: inherit;">博客</font>
-                                    </font>
-                                </a>
 
-                                </li>
                                 <li><a href="contact.html">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;"> 联系我们 </font>
@@ -713,6 +703,7 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/loginout.js"></script>
 <script src="assets/js/cookie.js"></script>
+<script src="assets/js/CartForbid.js"></script>
 <a id="scrollUp" href="#top" style="display: none; position: fixed; z-index: 2147483647;"><i
         class="ti-arrow-up"></i></a>
 
@@ -849,7 +840,7 @@
                     } else {
                         $("#logError").html("<font color='red' style='font-size: 12px;'>账号或密码错误</font>");
                     }
-                })
+                },"json");
 
         })
     });

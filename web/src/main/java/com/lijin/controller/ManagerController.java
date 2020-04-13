@@ -149,9 +149,10 @@ public class ManagerController {
         return jo.toString();
     }
 
-
+    /*
+    修改商品时的图片修改
+     */
     @RequestMapping(value = "imgChange", method = RequestMethod.POST)
-
     public Map<String, String> imgChange(@RequestParam(value = "pimg", required = true) MultipartFile photo, HttpServletRequest request) {
         Map<String, String> ret = new HashMap<String, String>();
 //        JSONObject jo = new JSONObject();
@@ -365,5 +366,6 @@ public class ManagerController {
         System.out.println(petAndSaler);
         return petAndSaler;
     }
+
 
 }

@@ -47,7 +47,6 @@ public class UserService {
          *          CriteriaBuilder：构造查询条件，内部封装很多查询条件（模糊匹配，精准匹配）
          *          ）
          *
-         *          案例：根据客户名称查询，查询客户名称为传智播客的客户
          *
          */
         Specification<User> spec = new Specification<User>() {
