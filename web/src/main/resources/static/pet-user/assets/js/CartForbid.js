@@ -49,4 +49,15 @@ function tablefill(data, length) {
     $("#cartShow").html(str);
 }
 
+/**
+ * 发送一个信号给后端，让后台将redis数据库中的内容传递至MySQL数据库中
+ */
+function emptyCar() {
+    $.post("/cart/emptyCar",{},function (data) {
+
+    },"json");
+
+
+}
+
 

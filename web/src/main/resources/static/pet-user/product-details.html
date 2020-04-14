@@ -190,58 +190,22 @@
                             </div>
                         </div>
 
-                        <div class="header-cart same-style">
+                        <div class="header-cart same-style" id="simpleCard">
                             <button class="icon-cart">
                                 <i class="icon-handbag"></i>
-                                <span class="count-style">02</span>
+                                <span class="count-style" id="goodsNumber">0</span>
                             </button>
                             <div class="shopping-cart-content">
-                                <ul>
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt="" src="assets/img/cart/cart-1.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">泰迪犬 </font></font></a></h4>
-                                            <h6><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">数量：02</font></font></h6>
-                                            <span>$260.00</span>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="ti-close"></i></a>
-                                        </div>
-                                    </li>
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt="" src="assets/img/cart/cart-2.jpg"></a>
-                                        </div>
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">泰迪犬</font></font></a></h4>
-                                            <h6><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">数量：02</font></font></h6>
-                                            <span><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">$260.00</font></font></span>
-                                        </div>
-                                        <div class="shopping-cart-delete">
-                                            <a href="#"><i class="ti-close"></i></a>
-                                        </div>
-                                    </li>
+                                <ul id="cartShow">
+                                    <!-- 登录则可以填充，购物车部分-->
                                 </ul>
                                 <div class="shopping-cart-total">
-                                    <h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运费：</font></font><span><font
-                                            style="vertical-align: inherit;"><font style="vertical-align: inherit;">$ 20.00</font></font></span>
-                                    </h4>
-                                    <h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">合计：</font></font><span
-                                            class="shop-total"><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;">$ 260.00</font></font></span></h4>
+
+                                    <h4>合计： <span class="shop-total" id="moneySum">￥0</span></h4>
                                 </div>
                                 <div class="shopping-cart-btn">
-                                    <a href="cart.html"><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;">查看购物车</font></font></a>
-                                    <a href="checkout.html"><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;">结帐</font></font></a>
+                                    <a href="cart.html">查看购物车</a>
+                                    <a href="checkout.html">结算</a>
                                 </div>
                             </div>
                         </div>
@@ -397,7 +361,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6">
                 <div class="product-details-img">
-                    <img id="zoompro" src="assets/img/product-details/s1.jpg" alt="放大">
+                    <img id="zoompro" src="" alt="放大">
                     <div id="gallery" class="mt-12 product-dec-slider owl-carousel owl-loaded owl-drag">
                         <div class="owl-dots">
                             <div class="owl-dot active"><span></span></div>
@@ -616,7 +580,7 @@
 <!-- modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span class="ti-close" aria-hidden="true"></span>
+        <span class="ti-closeti-close" aria-hidden="true"></span>
     </button>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -704,8 +668,7 @@
         </div>
     </div>
 </div>
-
-
+</body>
 <!-- all js here -->
 <script src="assets/js/vendor/jquery-1.12.0.min.js"></script>
 <script src="assets/js/popper.js"></script>
@@ -755,20 +718,34 @@
             '                    </div>\n' +
             '                    <div class="quality-wrapper mt-30 product-quantity">\n' +
             '                    <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">数量：</font></font></label>\n' +
-            '                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1">\n' +
+            '                    <input class="cart-plus-minus-box" id="buyNum" type="text" name="qtybutton" value="1">\n' +
             '                </div>\n' +
             '                <div class="product-list-action">\n' +
             '                    <div class="product-list-action-left">\n' +
-            '                    <a class="addtocart-btn" href="#" title="添加到购物车">\n' +
+            '                    <a class="addtocart-btn" onclick="buyMany()" title="添加到购物车">\n' +
             '                    <i class="ion-bag"></i>\n' +
             '                Add to cart\n' +
             '                </a>\n' +
             '                </div>\n' +
-            '                <div class="product-list-action-right">\n' +
-            '                    <a href="#" title="心愿单">\n' +
-            '                    <i class="ti-heart"></i>\n' +
-            '                    </a>\n' +
-            '                    </div>\n' +
             '                    </div>')
-    })
+    });
+    function buyMany() {
+        alert(111);
+        $.post("/user/petDetails", {pid: thisid}, function (data) {
+            var changeSize = $("#buyNum").val();
+            while (changeSize<=0||changeSize>data.pnum-changeSize){
+                changeSize= prompt("请输入规范的值?","请在这里输入数量");
+            }
+            $("#buyNum").val(changeSize);
+            $.post("/cart/addCartMany", {
+                pid:data.id,
+                pname:data.pname,
+                pprice:data.pprice,
+                pnum:changeSize,
+                pimg:data.pimg
+            },function (data) {
+                cartReflash();//刷新购物车
+            });
+        });
+    }
 </script>

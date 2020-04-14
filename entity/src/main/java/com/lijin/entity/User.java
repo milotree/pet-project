@@ -1,6 +1,10 @@
 package com.lijin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "pet_user")
@@ -19,6 +23,22 @@ public class User {
     private String uemail;
     @Column(name = "upro")
     private String upro;
+
+    /**
+     * 放弃外键维护全
+     * mappedBy：对方配置关系的属性名称
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OrderClear> orderClears = new HashSet<>();
+
+    public Set<OrderClear> getOrderClears() {
+        return orderClears;
+    }
+
+    public void setOrderClears(Set<OrderClear> orderClears) {
+        this.orderClears = orderClears;
+    }
 
     @Override
     public String toString() {

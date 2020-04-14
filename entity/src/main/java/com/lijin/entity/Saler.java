@@ -34,6 +34,18 @@ public class Saler {
     @JsonIgnore
     private Set<Pet> pets = new HashSet<>();
 
+    @OneToMany(mappedBy = "saler", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OrderClear> orderClears = new HashSet<>();
+
+    public Set<OrderClear> getOrderClears() {
+        return orderClears;
+    }
+
+    public void setOrderClears(Set<OrderClear> orderClears) {
+        this.orderClears = orderClears;
+    }
+
     public Set<Pet> getPets() {
         return pets;
     }

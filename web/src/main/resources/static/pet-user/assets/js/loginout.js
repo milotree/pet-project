@@ -16,7 +16,9 @@ function quit() {
     location.href = "index.html";
 
 }
-
+/*
+填充简易购物车列表
+ */
 function cartReflash() {
     $.post("/cart/showCart",{},function (data) {
         var str = "";

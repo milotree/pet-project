@@ -25,8 +25,16 @@ public class CartController {
     public void setRedisTemplate(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-    /*
-      一次一次添加购物车商品到redis缓存中，并返回json数据到前端展示
+
+
+    /**
+     *       一次一次添加购物车商品到redis缓存中，并返回json数据到前端展示
+     * @param pid
+     * @param pname
+     * @param pprice
+     * @param pnum
+     * @param pimg
+     * @return
      */
     @RequestMapping(value = "addCart", method = RequestMethod.POST)
     public String redisAdd(String pid, String pname, String pprice, String pnum, String pimg) {
@@ -75,7 +83,7 @@ public class CartController {
     }
 
     /**
-     * 添加多次商品
+     * 添加多次同一商品
      * @param pid
      * @param pname
      * @param pprice
@@ -91,7 +99,6 @@ public class CartController {
         String userListJson = redisTemplate.boundValueOps(pid).get();//获取键对应的值
         String json;
         System.out.println("购物车添加方法进行中");
-        JSONObject jo = new JSONObject();
         //2.判断redis中是否存在数据
         if (null==userListJson){
             //不存在，将前端获取过来的商品信息填入对象,存入redis中
@@ -109,12 +116,12 @@ public class CartController {
             System.out.println("购物车存在此商品，修改信息");
             RedisCart cart = JSONObject.parseObject(userListJson, RedisCart.class);
             Pet onePet = petService.findOnePet(pid);
-            if (Integer.valueOf(pnum)>cart.getGoodsNum()){
+            if ((Integer.valueOf(pnum)+cart.getGoodsNum())>onePet.getPnum()){
                 //获取所有的key，然后得到所有的值
                 System.out.println("此商品不能再多了");
             }else{
-                cart.setGoodsNum(Integer.valueOf(pnum));
-                cart.setGoodsPrice(Integer.valueOf(pprice)*Integer.valueOf(pnum));
+                cart.setGoodsNum(Integer.valueOf(pnum)+cart.getGoodsNum());
+                cart.setGoodsPrice(Integer.valueOf(pprice)*Integer.valueOf(pnum)+cart.getGoodsPrice());
                 json = JSONObject.toJSONString(cart);
                 redisTemplate.boundValueOps(pid).set(json);
             }
@@ -174,6 +181,9 @@ public class CartController {
         }
     }
 
+    /**
+     * 清理删除所有购物车商品
+     */
     @RequestMapping(value = "DelAllCart", method = RequestMethod.POST)
     public void redisDelAll(){
         System.out.println("删除所有购物车商品，方法进行");
@@ -182,4 +192,7 @@ public class CartController {
             redisTemplate.delete(keys);
         }
     }
+    /**
+     * 发起商品购买请求
+     */
 }
