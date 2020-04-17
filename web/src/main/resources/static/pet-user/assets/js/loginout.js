@@ -32,7 +32,7 @@ function cartReflash() {
                     '                                            <img alt="" src="/petImage/' + img + '">\n' +
                     '                                        </div>\n' +
                     '                                        <div class="shopping-cart-title">\n' +
-                    '                                            <h4><a href="#"><font style="vertical-align: inherit;"><font\n' +
+                    '                                            <h4><a onclick="showDetail(' + data[i].goodsId + ')"><font style="vertical-align: inherit;"><font\n' +
                     '                                                    style="vertical-align: inherit;">'+data[i].goodsName+' </font></font></a></h4>\n' +
                     '                                            <h6><font style="vertical-align: inherit;"><font\n' +
                     '                                                    style="vertical-align: inherit;">数量：'+data[i].goodsNum+'</font></font></h6>\n' +
@@ -59,3 +59,18 @@ function cartDelAll() {
 
     });
 }
+function showDetail(id) {
+    location.href = "product-details.html?pid=" + id;
+}
+
+
+$(function () {
+    $("#form1").submit(function () {
+        $.get("/cart/findPet",{pname:$("#showpet1").val()},function (data) {
+            $("#changePage").html(data);
+            $("#MenuTree").html(data);
+        })
+    })
+})
+
+

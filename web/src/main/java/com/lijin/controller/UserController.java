@@ -3,14 +3,19 @@ package com.lijin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lijin.entity.Information;
 import com.lijin.entity.Pet;
 import com.lijin.entity.PetAndSaler;
 import com.lijin.entity.User;
+import com.lijin.service.InformationService;
 import com.lijin.service.PetService;
 import com.lijin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -22,6 +27,12 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PetService petService;
+    @Autowired
+    private InformationService informationService;
+
+    public void setInformationService(InformationService informationService) {
+        this.informationService = informationService;
+    }
 
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -89,35 +100,24 @@ public class UserController {
         return JSONObject.toJSONString(user);
     }
 
-    //判断用户是否在线,
-    //注解方式获取cookie中对应的key值
-    /*@CrossOrigin
-    @RequestMapping(value = "findOne", method = {RequestMethod.POST})
+    /*
+    登录方法
+     */
+    @RequestMapping(value = "changePass", method = {
+            RequestMethod.POST}, produces = "application/json;charset=UTF-8")
     public @ResponseBody
-    String finOne(@CookieValue("cookieUser") String cookieUser) throws IOException {
-        System.out.println("判断用户是否在线");
+    String ChangePass(String utel, String oldpass,String newpass) throws JsonProcessingException {
+        System.out.println("修改密码方法执行了...");
+        //通过电话和密码查询用户
+        User user = userService.login(utel, oldpass);
+        user.setUpass(newpass);
+        boolean b = userService.saveUser(user);
         JSONObject jo = new JSONObject();
-            jo.put("uname",cookieUser);
-        System.out.println("此方法传递到前端的内容是"+jo.toString());
-        return  jo.toString();
-    }*/
+        System.out.println("返回到前端的用户数据为" + JSONObject.toJSONString(user));
+        return JSONObject.toJSONString(user);
+    }
 
-    //退出在线
-   /* @RequestMapping(value = "logOut", method = {RequestMethod.POST})
-    public String logOut(HttpServletResponse response, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        JSONObject jo = new JSONObject();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("cookieUser")) {
-                    cookie.setMaxAge(0);
-                    cookie.setPath("/");  //路径一定要写上，不然销毁不了
-                    response.addCookie(cookie);
-                }
-            }
-        }
-        return jo.toString();
-    }*/
+
     /*
     查询所有宠物
      */
@@ -136,7 +136,6 @@ public class UserController {
     /////查询指定id的宠物与卖家信息
      */
     @RequestMapping(value = "petDetails")
-    @ResponseBody
     public  PetAndSaler findPetAndSalers(String pid){
         System.out.println("查询当前卖家和宠物信息");
         PetAndSaler petAndSaler = petService.searchOneByCondition(Integer.valueOf(pid));
@@ -192,7 +191,44 @@ public class UserController {
             List<Pet> pets = petService.searchByName(Integer.valueOf(currPage), pname);
             return JSONObject.toJSONString(pets);
         }
-
-
     }
+    /*
+    /////根据宠物显示评论
+     */
+    @RequestMapping(value = "findcomment", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Information> findAllComment(String pid){
+        System.out.println("查询宠物评论");
+        List<Information> all = informationService.findAll(pid);
+        return all;
+    }
+    /*
+    保存对应的评论
+     */
+    @RequestMapping(value = "savecomment", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveAllComment(HttpServletResponse response, String pid, String infoName, String infoContent) throws IOException {
+        System.out.println(pid+infoName+infoContent);
+        Information information = new Information();
+        information.setInfoname(infoName);
+        information.setInfocontent(infoContent);
+        information.setPid(Integer.valueOf(pid));
+        informationService.saveComment(information);
+        response.setContentType("text/html; charset=utf-8");//千万不要忘了设编码,否则密钥报错!!!!!!
+        PrintWriter out = response.getWriter();
+        out.print("<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>Title</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "</body>\n" +
+                "<script>\n" +
+                "    location.href=\"http://localhost:8080/pet-user/product-details.html?pid="+pid+"\";\n" +
+                "</script>\n" +
+                "</html>");
+        out.close();
+    }
+
 }

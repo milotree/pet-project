@@ -73,4 +73,9 @@ public class UserService {
         User user = userDao.findByUtelAndUpass(utel, upass);
         return user;
     }
+
+    public User findUser(String uid){
+        User user = userDao.getOne(Integer.valueOf(uid));
+        return user;
+    }
 }

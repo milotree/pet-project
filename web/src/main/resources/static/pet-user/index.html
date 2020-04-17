@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>千宠网 - Pet Food eCommerce Bootstrap4 Template</title>
+    <title>千宠网 - The Best Online Pet Market</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body id="changePage">
 <header class="header-area">
     <div class="header-top theme-bg">
         <div class="container">
@@ -40,7 +40,8 @@
                         <nav>
                             <ul>
                                 <li><a href="index.html"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">HOME</font></font></a>
+                                        style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">home</font></font></font></font></a>
 
                                 </li>
                                 <li class="mega-menu-position"><a href="shop-page.html"><font
@@ -48,52 +49,24 @@
                                         style="vertical-align: inherit;">宠物</font></font></a>
 
                                 </li>
-                                <li><a href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">页数</font></font></a>
-                                    <ul class="submenu">
-                                        <li>
-                                            <a href="about-us.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">关于我们</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-page.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">店铺页面</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-list.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">店铺清单</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-list.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">宠物详情</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="cart.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">购物车页面</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="checkout.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">查看</font></font></a>
-                                        </li>
+                                <li>
+                                    <a href="cart.html"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">购物车</font></font></a>
+                                </li>
+                                <li>
+                                    <a href="checkout.html"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">订单</font></font></a>
+                                </li>
 
-                                        <li>
-                                            <a href="contact.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">联系我们</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="my-account.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">我的帐户</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="login-register.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">登录/注册</font></font></a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a onclick="checkMyaccount()"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">我的帐户</font></font></a>
                                 </li>
                                 <li><a href="about-us.html"><font style="vertical-align: inherit;"><font
                                         style="vertical-align: inherit;">关于</font></font></a></li>
                                 <li><a href="contact.html"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">联系我们</font></font></a></li>
+                                        style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">联系我们</font></font></font></font></a></li>
                             </ul>
                         </nav>
                     </div>
@@ -106,9 +79,9 @@
                                 <i class="ti-close s-close"></i>
                             </button>
                             <div class="search-content">
-                                <form action="#">
-                                    <input type="text" placeholder="搜索">
-                                    <button>
+                                <form action="#" id="form1" method="get">
+                                    <input type="text" id="showpet1" placeholder="搜索">
+                                    <button type="submit">
                                         <i class="icon-magnifier"></i>
                                     </button>
                                 </form>
@@ -133,8 +106,8 @@
                                 <div class="shopping-cart-btn">
                                     <a href="cart.html"><font style="vertical-align: inherit;"><font
                                             style="vertical-align: inherit;">查看购物车</font></font></a>
-                                    <a href="checkout.html"><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;">结帐</font></font></a>
+                                    <a onclick="addOrder()"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">结算</font></font></a>
                                 </div>
                             </div>
                         </div>
@@ -162,79 +135,24 @@
                                                     style="vertical-align: inherit;">店铺页面</font></font></a>
                                         </li>
                                         <li>
-                                            <a href="shop-list.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">店铺清单</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-list.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">宠物详情</font></font></a>
-                                        </li>
-                                        <li>
                                             <a href="cart.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">购物车页面</font></font></a>
+                                                    style="vertical-align: inherit;">购物车</font></font></a>
                                         </li>
                                         <li>
                                             <a href="checkout.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">查看</font></font></a>
+                                                    style="vertical-align: inherit;">订单</font></font></a>
                                         </li>
 
                                         <li>
-                                            <a href="contact.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">联系我们</font></font></a>
+                                            <a href="my-account.html">我的信息</a>
                                         </li>
-                                        <li>
-                                            <a href="my-account.html">my account</a>
-                                        </li>
-                                        <li>
-                                            <a href="login-register.html">login / register</a>
-                                        </li>
+
                                     </ul>
                                 </li>
-                                <li><a href="#">Food</a>
-                                    <ul>
-                                        <li><a href="#">Dogs Food</a>
-                                            <ul>
-                                                <li><a href="shop-page.html">Grapes and Raisins</a></li>
-                                                <li><a href="shop-page.html">Carrots</a></li>
-                                                <li><a href="shop-page.html">Peanut Butter</a></li>
-                                                <li><a href="shop-page.html">Salmon fishs</a></li>
-                                                <li><a href="shop-page.html">Eggs</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">Cats Food</a>
-                                            <ul>
-                                                <li><a href="shop-page.html">Meat</a></li>
-                                                <li><a href="shop-page.html">Fish</a></li>
-                                                <li><a href="shop-page.html">Eggs</a></li>
-                                                <li><a href="shop-page.html">Veggies</a></li>
-                                                <li><a href="shop-page.html">Cheese</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">Fishs Food</a>
-                                            <ul>
-                                                <li><a href="shop-page.html">Rice</a></li>
-                                                <li><a href="shop-page.html">Veggies</a></li>
-                                                <li><a href="shop-page.html">Cheese</a></li>
-                                                <li><a href="shop-page.html">wheat bran</a></li>
-                                                <li><a href="shop-page.html">Cultivation</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a href="login-register.html">登录/注册</a>
                                 </li>
-                                <li><a href="#">blog</a>
-                                    <ul>
-                                        <li>
-                                            <a href="blog.html">blog page</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-leftsidebar.html">blog left sidebar</a>
-                                        </li>
-                                        <li>
-                                            <a href="blog-details.html">blog details</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="contact.html"> Contact us </a></li>
+                                <li><a href="contact.html"> 联系我们 </a></li>
                             </ul>
                         </nav>
                     </div>
@@ -644,7 +562,7 @@
                 str += ' <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">\n' +
                     '                        <div class="product-wrapper mb-10">\n' +
                     '                            <div class="product-img">\n' +
-                    '                                <a onclick="showDetail(' + data[i].id + ')">\n' +
+                    '                                <a onclick="showDetail(\'' + data[i].id + '\')">\n' +
                     '                                    <img src="/petImage/' + img + '" alt="">\n' +
                     '                                </a>\n' +
                     '                                <div class="product-action">\n' +
@@ -672,6 +590,8 @@
     function showDetail(id) {
         location.href = "product-details.html?pid=" + id;
     }
+
+
 
 
 </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>千宠网 - Pet Food eCommerce Bootstrap4 Template</title>
+    <title>千宠网 - The Best Online Pet Market</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="assets/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body id="changePage">
 <header class="header-area">
     <div class="header-top theme-bg">
         <div class="container">
@@ -39,7 +39,8 @@
                         <nav>
                             <ul>
                                 <li><a href="index.html"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">HOME</font></font></a>
+                                        style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">home</font></font></font></font></a>
 
                                 </li>
                                 <li class="mega-menu-position"><a href="shop-page.html"><font
@@ -47,55 +48,24 @@
                                         style="vertical-align: inherit;">宠物</font></font></a>
 
                                 </li>
-                                <li><a href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">页数</font></font></a>
-                                    <ul class="submenu">
-                                        <li>
-                                            <a href="about-us.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">关于我们</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-page.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">店铺页面</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-list.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">店铺清单</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="product-details.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">宠物详情</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="cart.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">购物车页面</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="checkout.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">查看</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="wishlist.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">愿望清单</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="contact.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">联系我们</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="my-account.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">我的帐户</font></font></a>
-                                        </li>
-                                        <li>
-                                            <a href="login-register.html"><font style="vertical-align: inherit;"><font
-                                                    style="vertical-align: inherit;">登录/注册</font></font></a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a href="cart.html"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">购物车</font></font></a>
+                                </li>
+                                <li>
+                                    <a href="checkout.html"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">订单</font></font></a>
+                                </li>
+
+                                <li>
+                                    <a onclick="checkMyaccount()"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">我的帐户</font></font></a>
                                 </li>
                                 <li><a href="about-us.html"><font style="vertical-align: inherit;"><font
                                         style="vertical-align: inherit;">关于</font></font></a></li>
                                 <li><a href="contact.html"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">联系我们</font></font></a></li>
+                                        style="vertical-align: inherit;"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">联系我们</font></font></font></font></a></li>
                             </ul>
                         </nav>
                     </div>
@@ -108,16 +78,17 @@
                                 <i class="ti-close s-close"></i>
                             </button>
                             <div class="search-content">
-                                <form action="#">
-                                    <input type="text" placeholder="搜索">
-                                    <button>
+                                <form action="#" id="form1" method="get">
+                                    <input type="text" id="showpet1" placeholder="搜索">
+                                    <button type="submit" onclick="showpet()">
                                         <i class="icon-magnifier"></i>
                                     </button>
+
                                 </form>
                             </div>
                         </div>
 
-                        <div class="header-cart same-style" id="simpleCard">
+                        <div class="header-cart same-style">
                             <button class="icon-cart">
                                 <i class="icon-handbag"></i>
                                 <span class="count-style" id="goodsNumber">0</span>
@@ -128,11 +99,15 @@
                                 </ul>
                                 <div class="shopping-cart-total">
 
-                                    <h4>合计： <span class="shop-total" id="moneySum">￥0</span></h4>
+                                    <h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">合计：</font></font><span
+                                            class="shop-total"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;" id="moneySum">￥ 0</font></font></span></h4>
                                 </div>
                                 <div class="shopping-cart-btn">
-                                    <a href="cart.html">查看购物车</a>
-                                    <a href="checkout.html">结算</a>
+                                    <a href="cart.html"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">查看购物车</font></font></a>
+                                    <a onclick="addOrder()"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;">结算</font></font></a>
                                 </div>
                             </div>
                         </div>
@@ -145,45 +120,39 @@
                     <div class="mobile-menu">
                         <nav id="mobile-menu-active" style="display: block;">
                             <ul class="menu-overflow">
-                                <li><a href="index.html">HOME</a>
+                                <li><a href="index.html"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">HOME</font></font></a>
                                 </li>
-                                <li><a href="#">pages</a>
+                                <li><a href="#"><font style="vertical-align: inherit;"><font
+                                        style="vertical-align: inherit;">页数</font></font></a>
                                     <ul>
                                         <li>
-                                            <a href="about-us.html">about us</a>
+                                            <a href="about-us.html"><font style="vertical-align: inherit;"><font
+                                                    style="vertical-align: inherit;">关于我们</font></font></a>
                                         </li>
                                         <li>
-                                            <a href="shop-page.html">shop page</a>
+                                            <a href="shop-page.html"><font style="vertical-align: inherit;"><font
+                                                    style="vertical-align: inherit;">店铺页面</font></font></a>
                                         </li>
                                         <li>
-                                            <a href="shop-list.html">shop list</a>
+                                            <a href="cart.html"><font style="vertical-align: inherit;"><font
+                                                    style="vertical-align: inherit;">购物车</font></font></a>
                                         </li>
                                         <li>
-                                            <a href="product-details.html">product details</a>
+                                            <a href="checkout.html"><font style="vertical-align: inherit;"><font
+                                                    style="vertical-align: inherit;">订单</font></font></a>
                                         </li>
+
                                         <li>
-                                            <a href="cart.html">cart page</a>
+                                            <a href="my-account.html">我的信息</a>
                                         </li>
-                                        <li>
-                                            <a href="checkout.html">checkout</a>
-                                        </li>
-                                        <li>
-                                            <a href="wishlist.html">wishlist</a>
-                                        </li>
-                                        <li>
-                                            <a href="contact.html">contact us</a>
-                                        </li>
-                                        <li>
-                                            <a href="my-account.html">my account</a>
-                                        </li>
-                                        <li>
-                                            <a href="login-register.html">login / register</a>
-                                        </li>
+
                                     </ul>
                                 </li>
-                                <li><a href="#">Food</a>
+                                <li>
+                                    <a href="login-register.html">登录/注册</a>
                                 </li>
-                                <li><a href="contact.html"> 关于我们 </a></li>
+                                <li><a href="contact.html"> 联系我们 </a></li>
                             </ul>
                         </nav>
                     </div>
@@ -263,7 +232,7 @@
                                     <a href="shop-page.html"><font style="vertical-align: inherit;"><font
                                             style="vertical-align: inherit;">继续购物</font></font></a>
                                     <button><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;" onclick="">结账</font></font></button>
+                                            style="vertical-align: inherit;" onclick="addOrder()">结算</font></font></button>
                                 </div>
                                 <div class="cart-clear">
                                     <a onclick="cartDetialDelAll()"><font style="vertical-align: inherit;"><font
@@ -410,8 +379,8 @@
 <script src="assets/js/main.js"></script>
 <a id="scrollUp" href="#top" style="display: none; position: fixed; z-index: 2147483647;"><i
         class="ti-arrow-up"></i></a>
-<script src="assets/js/loginout.js"></script>
 <script src="assets/js/cookie.js"></script>
+<script src="assets/js/loginout.js"></script>
 <script src="assets/js/CartForbid.js"></script>
 <script>
     $(function () {
@@ -493,4 +462,6 @@
 
         $("#cartDetail").html(petStr);
     }
+
+
 </script>

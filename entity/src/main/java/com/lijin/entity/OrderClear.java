@@ -1,5 +1,6 @@
 package com.lijin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -12,16 +13,20 @@ import javax.persistence.*;
 public class OrderClear {
     @Id
     @Column(name = "oid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer oid;//订单编号
 
     @Column(name = "oprice")
     private Integer oprice;//订单金额
 
     @Column(name = "otime")
-    private Integer otime;//支付时间
+    private String otime;//下单时间
 
     @Column(name = "nameandnum")
-    private String nameandnum;//宠物和数量的json字符串
+    private String nameandnum;//宠物详情的json字符串
+
+    @Column(name = "ostatus")
+    private Integer ostatus;//订单状态
 
     /**
      * 配置订单到用户的多对一关系
@@ -39,13 +44,14 @@ public class OrderClear {
     @ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", referencedColumnName = "uid")
     @JsonIgnore
+    @JSONField(serialize = false)
     private User user;
 
-    @ManyToOne(targetEntity = Saler.class,fetch = FetchType.LAZY)
-    @JoinColumn(name = "sid", referencedColumnName = "sid")
+   /* @ManyToOne(targetEntity = OrderGoods.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "oid", referencedColumnName = "oid")
     @JsonIgnore
     private Saler saler;
-
+*/
 
     @Override
     public String toString() {
@@ -57,12 +63,12 @@ public class OrderClear {
                 '}';
     }
 
-    public Saler getSaler() {
-        return saler;
+    public Integer getOstatus() {
+        return ostatus;
     }
 
-    public void setSaler(Saler saler) {
-        this.saler = saler;
+    public void setOstatus(Integer ostatus) {
+        this.ostatus = ostatus;
     }
 
     public User getUser() {
@@ -89,11 +95,11 @@ public class OrderClear {
         this.oprice = oprice;
     }
 
-    public Integer getOtime() {
+    public String getOtime() {
         return otime;
     }
 
-    public void setOtime(Integer otime) {
+    public void setOtime(String otime) {
         this.otime = otime;
     }
 

@@ -2,6 +2,7 @@ package com.lijin.dao;
 
 import com.lijin.entity.Pet;
 import com.lijin.entity.PetAndSaler;
+import com.lijin.entity.Saler;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -41,5 +42,5 @@ public interface PetDao extends JpaRepository<Pet,Integer>, JpaSpecificationExec
             +"from Pet b left join Saler a on b.saler.sid = a.sid where b.id = :id and b.ptype = :ptype ")
     List<PetAndSaler> getByPetId(@Param("id") Integer id,@Param("ptype") String ptype);
 
-
+    Pet findByPnameAndSaler(String pname, Saler saler);
 }

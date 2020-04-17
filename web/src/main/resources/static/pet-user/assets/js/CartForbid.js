@@ -13,6 +13,19 @@ function addCard(id, pname, pprice, pnum, pimg) {
     window.scrollTo(0, 300);
 }
 
+function checkMyaccount() {
+    if (cookie.getCookie("uname")){
+        var uid = cookie.getCookie("uid");
+        location.href="my-account.html?uid="+uid;
+}else {
+        if (window.confirm("需登录才能添加商品，是否登录？")) {
+            location.href = "login-register.html";
+        } else {
+            return false;
+        }
+    }
+}
+
 
 function delCart(id) {
     $.post("/cart/delCart", {pid: id}, function (data) {
@@ -52,12 +65,25 @@ function tablefill(data, length) {
 /**
  * 发送一个信号给后端，让后台将redis数据库中的内容传递至MySQL数据库中
  */
-function emptyCar() {
+/*function emptyCar() {
     $.post("/cart/emptyCar",{},function (data) {
 
     },"json");
 
 
+}*/
+
+//将购物车的值放入订单
+function addOrder() {
+    var uid = cookie.getCookie("uid");
+    var timestamp=new Date().getTime();
+    $.post("/cart/addOrder",{uid:uid,time:timestamp},function (data) {
+        if (data.msg=="提交订单成功"){
+            location.href="checkout.html";
+        }else {
+            alert(data.msg);
+        }
+    },"json")
 }
 
 

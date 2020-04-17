@@ -3,6 +3,7 @@ package com.lijin.service;
 import com.lijin.dao.PetDao;
 import com.lijin.entity.Pet;
 import com.lijin.entity.PetAndSaler;
+import com.lijin.entity.Saler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.*;
@@ -174,5 +175,13 @@ public class PetService {
         return list;//返回两者一起的集合
     }
 
+    public Pet findByPname(String pname, Saler saler){
+        Pet pet = petDao.findByPnameAndSaler(pname,saler);
+        return pet;
+    }
 
+    public Pet getOne(Integer pid){
+        Pet one = petDao.getOne(pid);
+        return one;
+    }
 }

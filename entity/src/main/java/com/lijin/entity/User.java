@@ -1,5 +1,6 @@
 package com.lijin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class User {
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @JSONField(serialize = false)
     private Set<OrderClear> orderClears = new HashSet<>();
 
     public Set<OrderClear> getOrderClears() {
