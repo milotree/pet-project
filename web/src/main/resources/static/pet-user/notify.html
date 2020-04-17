@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="assets/js/vendor/jquery-3.3.1.js"></script>
+<script>
+    $.ajax({
+
+        url:"/cart/payloading",
+
+        type:"post",
+
+        dataType:"html",
+
+        cache:false,
+
+        async:false,
+
+        data:{},
+
+        success:function(data){
+
+             $("#MenuTree").html(data);
+
+        },
+
+        error:function(retMsg){
+
+            try{
+
+            }catch(eee){
+
+            }
+
+        }
+
+    });
+</script>
+</html>
