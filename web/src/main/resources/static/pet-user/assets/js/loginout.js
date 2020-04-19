@@ -3,7 +3,7 @@ $(function () {
    if (cookie.getCookie("uname")){
        var msg = "<li>欢迎回来</li>" + cookie.getCookie("uname");
        $("#loginOnline").html(msg + "&nbsp;&nbsp;<a onclick='quit()' style='cursor: pointer; font-size: 14px;'>退出</a>");
-       cartReflash();
+       cartReflash(cookie.getCookie("uid"));
    }
 });
 
@@ -19,8 +19,8 @@ function quit() {
 /*
 填充简易购物车列表
  */
-function cartReflash() {
-    $.post("/cart/showCart",{},function (data) {
+function cartReflash(uid) {
+    $.post("/cart/showCart",{uid:uid},function (data) {
         var str = "";
         var img;
         var moneySum =0;
@@ -39,7 +39,7 @@ function cartReflash() {
                     '                                            <span>￥'+data[i].goodsPrice+'</span>\n' +
                     '                                        </div>\n' +
                     '                                        <div class="shopping-cart-delete">\n' +
-                    '                                            <a onclick="delCart(\''+data[i].goodsId+'\')"><i class="ti-close"></i></a>\n' +
+                    '                                            <a onclick="delCart(\''+data[i].goodsId+'\',\'' + cookie.getCookie("uid") + '\')"><i class="ti-close"></i></a>\n' +
                     '                                        </div>\n' +
                     '                                    </li>\n';
                 moneySum+=parseInt(data[i].goodsPrice);
@@ -54,8 +54,8 @@ function cartReflash() {
     },"json");
 }
 function cartDelAll() {
-    $.post("/cart/DelAllCart",{},function (data) {
-        cartReflash();
+    $.post("/cart/DelAllCart",{uid:cookie.getCookie("uid")},function (data) {
+        cartReflash(cookie.getCookie("uid"));
 
     });
 }

@@ -1,13 +1,13 @@
-function addCard(id, pname, pprice, pnum, pimg) {
+function addCard(uid,id, pname, pprice, pnum, pimg) {
     if (cookie.getCookie("uname")) {
-        $.post("/cart/addCart", {pid: id, pname: pname, pprice: pprice, pnum: pnum, pimg: pimg}, function (data) {
+        $.post("/cart/addCart", {uid:uid,pid: id, pname: pname, pprice: pprice, pnum: pnum, pimg: pimg}, function (data) {
             tablefill(data, data.length);
         }, "json");
     } else {
-        if (window.confirm("需登录才能添加商品，是否登录？")) {
+        if (window.confirm("需登录才能进行操作，是否登录？")) {
             location.href = "login-register.html";
         } else {
-            return false;
+            return false; 
         }
     }
     window.scrollTo(0, 300);
@@ -18,7 +18,7 @@ function checkMyaccount() {
         var uid = cookie.getCookie("uid");
         location.href="my-account.html?uid="+uid;
 }else {
-        if (window.confirm("需登录才能添加商品，是否登录？")) {
+        if (window.confirm("需登录才能进行操作，是否登录？")) {
             location.href = "login-register.html";
         } else {
             return false;
@@ -27,8 +27,9 @@ function checkMyaccount() {
 }
 
 
-function delCart(id) {
-    $.post("/cart/delCart", {pid: id}, function (data) {
+function delCart(id,uid) {
+    alert(id+"++++++++"+uid);
+    $.post("/cart/delCart", {pid:id,uid:uid}, function (data) {
         tablefill(data, data.length);
 
     }, "json");
@@ -52,7 +53,7 @@ function tablefill(data, length) {
             '                                            <span>￥' + data[i].goodsPrice + '</span>\n' +
             '                                        </div>\n' +
             '                                        <div class="shopping-cart-delete">\n' +
-            '                                            <a onclick="delCart(\'' + data[i].goodsId + '\')"><i class="ti-close"></i></a>\n' +
+            '                                            <a onclick="delCart(\'' + data[i].goodsId + '\',\'' + cookie.getCookie("uid") + '\')"><i class="ti-close"></i></a>\n' +
             '                                        </div>\n' +
             '                                    </li>\n';
         moneySum += parseInt(data[i].goodsPrice);

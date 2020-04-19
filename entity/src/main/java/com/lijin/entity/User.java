@@ -24,7 +24,8 @@ public class User {
     private String uemail;
     @Column(name = "upro")
     private String upro;
-
+    @Column(name = "utype")
+    private Integer utype;
     /**
      * 放弃外键维护全
      * mappedBy：对方配置关系的属性名称
@@ -100,5 +101,13 @@ public class User {
 
     public void setUpro(String upro) {
         this.upro = upro;
+    }
+
+    public Integer getUtype() {
+        return utype;
+    }
+
+    public void setUtype(Integer utype) {
+        this.utype = utype;
     }
 }

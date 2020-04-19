@@ -24,6 +24,16 @@ public class OrderGoods {
     @Column(name = "uname")
     private String uname;//用户名
 
+    @Override
+    public String toString() {
+        return "OrderGoods{" +
+                "ooid=" + ooid +
+                ", ooprice=" + ooprice +
+                ", oostatus=" + oostatus +
+                ", oid=" + oid +
+                ", uname='" + uname + '\'' +
+                '}';
+    }
 
     public Integer getOoid() {
         return ooid;

@@ -566,7 +566,7 @@
                     '                                    <img src="/petImage/' + img + '" alt="">\n' +
                     '                                </a>\n' +
                     '                                <div class="product-action">\n' +
-                    '                                    <a title="添加到购物车" onclick="addCard(' + data[i].id + ',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
+                    '                                    <a title="添加到购物车" onclick="addCard(\''+cookie.getCookie("uid")+'\',\'' + data[i].id + '\',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
                     '                                        <i class="ti-shopping-cart"></i>\n' +
                     '                                    </a>\n' +
                     '                                </div>\n' +

@@ -12,11 +12,13 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class DelJob extends QuartzJobBean {
     @Autowired
@@ -25,6 +27,12 @@ public class DelJob extends QuartzJobBean {
     private PetService petService;
     @Autowired
     private SalerService salerService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public void setOrderClearService(OrderClearService orderClearService) {
         this.orderClearService = orderClearService;
@@ -71,8 +79,13 @@ public class DelJob extends QuartzJobBean {
                     System.out.println("收货完成");
                 }
             }
-        }
 
+            Set<String> keys = redisTemplate.keys("*");
+            if (keys != null) {
+                redisTemplate.delete(keys);
+            }
+
+        }
 
 
     }

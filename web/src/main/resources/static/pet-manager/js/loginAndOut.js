@@ -6,7 +6,6 @@ $(function () {
 function logout(){
     cookie.removeCookie("mname1");
     $.post("/manager/logout",{},function (data) {
-        alert(data);
         // var res=JSON.parse(data);
         if (data.msg=="yes"){
             location.href="login-Manager.html";

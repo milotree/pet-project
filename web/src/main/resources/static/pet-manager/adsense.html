@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>广告位管理</title>
+    <title>宠物管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -93,7 +93,7 @@
     $(function () {
         initLayPage();
     });
-
+    var thisData;
     //初始化分页数据
     function initLayPage(pageConf) {
         if (!pageConf) {
@@ -176,9 +176,9 @@
                             fillTable(thisData, (pageConf.currentPage - 1) * pageConf.pageSize); //页面填充
                         }
                     });
-                }, "json")
+                }, "json");
                 return false;
-            })
+            });
 
 
 //-------------------填充表格数据
@@ -189,9 +189,9 @@
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].page == 0) {
                         age = "0-3个月";
-                    } else if (data[i] == 1) {
+                    } else if (data[i].page == 1) {
                         age = "3-12个月";
-                    } else if (data[i] == 2) {
+                    } else if (data[i].page == 2) {
                         age = "1-3年";
                     } else {
                         age = "三年+";
@@ -215,7 +215,7 @@
                         "                                    编辑\n" +
                         "                                </a>\n" +
                         "                                </a>\n" +
-                        "                                <a class=\"lafite_margin_left_10px\" title=\"删除\" onclick=\"member_del(this," + data[i].id + ")\"\n" +
+                        "                                <a class=\"lafitewu_auditing lafite_margin_left_10px\" title=\"删除\" onclick=\"member_del(this," + data[i].id + ")\"\n" +
                         "                                   href=\"javascript:;\">\n" +
                         "                                    删除\n" +
                         "                                </a>\n" +
@@ -251,14 +251,29 @@
     }
 
     function change(id) {
-        alert("编辑时间触发");
+
         // $.post("/manager/change", {pid: id}, function (data) {
           //以下方式将数据储存到localStorage中
           //   JSON.parse(data);
           //   localStorage.setItem(id,data);
-            location.href="fix_adsense.html?pid="+id;
+        layer.open({
+            type: 2,                         //0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            title: "修改",                  //标题
+            content: "fix_adsense.html?pid="+id,     //网址
+            shade: 0.4,                       //阴影度
+            area: ['1200px', '500px'],
+            maxmin: true,                    //最大最小化
+            success: function (layero, index) {   //成功获得加载order-view.html时，预先加载，将值从父窗口传到 子窗口
+
+            }
+        })
+
+
+
         // }, "json");
     }
+
+
 
 </script>
 </html>

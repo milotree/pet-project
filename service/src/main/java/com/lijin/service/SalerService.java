@@ -33,4 +33,25 @@ public class SalerService {
         return saler;
     }
 
+    /**
+     * 保存卖家信息
+     * @param saler
+     */
+    public void saveSaler(Saler saler){
+        salerDao.save(saler);
+    }
+
+    /**
+     * 通过卖家名字模糊查询卖家信息
+     * @param sname
+     * @return
+     */
+    public List<Saler> findAllBySname(String sname){
+        List<Saler> allBySnameLike = salerDao.findAllBySnameLike("%" + sname + "%");
+        return allBySnameLike;
+    }
+
+    public void delSaler(Integer sid){
+        salerDao.deleteById(sid);
+    }
 }

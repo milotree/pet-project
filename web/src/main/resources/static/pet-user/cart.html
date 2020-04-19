@@ -181,7 +181,7 @@
                 style="vertical-align: inherit;">您的购物车物品</font></font></h3>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                <form action="#">
+                <form id="toOrder">
                     <div class="table-content table-responsive">
                         <table>
                             <thead>
@@ -231,8 +231,8 @@
                                 <div class="cart-shiping-update">
                                     <a href="shop-page.html"><font style="vertical-align: inherit;"><font
                                             style="vertical-align: inherit;">继续购物</font></font></a>
-                                    <button><font style="vertical-align: inherit;"><font
-                                            style="vertical-align: inherit;" onclick="addOrder()">结算</font></font></button>
+                                    <button onclick="addOrder()" type="submit"><font style="vertical-align: inherit;"><font
+                                            style="vertical-align: inherit;" >结算</font></font></button>
                                 </div>
                                 <div class="cart-clear">
                                     <a onclick="cartDetialDelAll()"><font style="vertical-align: inherit;"><font
@@ -383,62 +383,38 @@
 <script src="assets/js/loginout.js"></script>
 <script src="assets/js/CartForbid.js"></script>
 <script>
+    $("#toOrder").submit(false);
     $(function () {
-        showCartDetail();
+        showCartDetail(cookie.getCookie("uid"));
     });
 
     ///填充购物车页面数据
-    function showCartDetail() {
-        $.post("/cart/showCart", {}, function (data) {
+    function showCartDetail(uid) {
+        $.post("/cart/showCart", {uid:uid}, function (data) {
             cartDetailFill(data);
         }, "json");
     }
 
     //用来删除购物车某件物品
-    function delCartDetail(id) {
-        $.post("/cart/delCart", {pid: id}, function (data) {
+    function delCartDetail(id,uid) {
+        $.post("/cart/delCart", {pid:id,uid:uid}, function (data) {
             cartDetailFill(data);
-            cartReflash();
+            cartReflash(cookie.getCookie("uid"));
 
         }, "json");
     }
 
     //用来清空购物车
     function cartDetialDelAll() {
-        $.post("/cart/DelAllCart", {}, function (data) {
-            cartReflash();
-            showCartDetail();
+        $.post("/cart/DelAllCart", {uid:cookie.getCookie("uid")}, function (data) {
+            cartReflash(cookie.getCookie("uid"));
+            showCartDetail(cookie.getCookie("uid"));
         });
     }
 
 
 
-    /*function checkChange() {
 
-        $.post("/cart/showCart", {}, function (data) {
-            for (var i = 0; i < data.length; i++) {
-                var changeSize = $("#" + data[i].goodsNum + "").val();
-                while (changeSize < 0&&changeSize>){
-                    changeSize= prompt("请输入规范的值?","请在这里输入年龄");
-                }
-                $("#" + data[i].goodsNum + "").val(changeSize);
-                    if (changeSize != data[i].goodsNum) {
-                        $.post("/cart/addCartMany", {
-                            pid: data[i].goodsId,
-                            pname: data[i].goodsName,
-                            pprice: (parseInt(data[i].goodsPrice) / parseInt(data[i].goodsNum)),
-                            pnum: changeSize,
-                            pimg: data[i].goodsImg
-                        }, function (data) {
-                            tablefill(data, data.length);
-                            cartDetailFill(data);
-                        }, "json");
-                    }
-            }
-        }, "json");
-
-    }
-*/
     function cartDetailFill(data) {
         var petStr = "";
         var img;
@@ -452,7 +428,7 @@
                 '                                            <td class="product-price-cart"><span class="amount">￥' + (parseInt(data[i].goodsPrice) / parseInt(data[i].goodsNum)) + '</span></td>\n' +
                 '                                            <td class="product-quantity">\n' +
                 '                                                <div class="cart-plus-minus">\n' +
-                '                                                    <input class="cart-plus-minus-box" type="text" id="' + data[i].goodsNum + '" name="qtybutton" value="' + data[i].goodsNum + '">\n' +
+                '                                                    <input class="cart-plus-minus-box" type="text" id="' + data[i].goodsNum + '"  value="' + data[i].goodsNum + '">\n' +
                 '                                                </div>\n' +
                 '                                            </td>\n' +
                 '                                            <td class="product-subtotal"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">￥' + data[i].goodsPrice + '</font></font></td>\n' +

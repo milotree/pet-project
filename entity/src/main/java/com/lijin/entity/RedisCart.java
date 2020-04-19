@@ -1,6 +1,7 @@
 package com.lijin.entity;
 //当用户未登录时，存储类型为cookie
 public class RedisCart {
+
     //商品id
     private Integer goodsId;
     //商品名称
@@ -14,7 +15,7 @@ public class RedisCart {
 
     @Override
     public String toString() {
-        return "CookieCar{" +
+        return "{" +
                 "goodsId=" + goodsId +
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsNum=" + goodsNum +

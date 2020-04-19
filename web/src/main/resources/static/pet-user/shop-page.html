@@ -457,7 +457,7 @@
                 '                                                    <img src="/petImage/' + img + '" alt="">\n' +
                 '                                                </a>\n' +
                 '                                                <div class="product-action">\n' +
-                '                                                    <a title="添加到购物车"onclick="addCard(' + data[i].id + ',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
+                '                                                    <a title="添加到购物车"onclick="addCard(\''+cookie.getCookie("uid")+'\',\'' + data[i].id + '\',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
                 '                                                        <i class="ti-shopping-cart"></i>\n' +
                 '                                                    </a>\n' +
                 '                                                </div>\n' +
@@ -477,7 +477,7 @@
                 '                                                </div>\n' +
                 '                                                <div class="product-list-action">\n' +
                 '                                                    <div class="product-list-action-left">\n' +
-                '                                                        <a class="addtocart-btn" title="Add to cart" onclick="addCard(' + data[i].id + ',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')"><i class="ion-bag"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 添加到购物车</font></font></a>\n' +
+                '                                                        <a class="addtocart-btn" title="Add to cart" onclick="addCard(\''+cookie.getCookie("uid")+'\',\'' + data[i].id + '\',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')"><i class="ion-bag"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 添加到购物车</font></font></a>\n' +
                 '                                                    </div>\n' +
                 '                                                    <div class="product-list-action-right">\n' +
                 '                                                    </div>\n' +
@@ -489,6 +489,7 @@
         }
         var begin;
         var end;
+        // alert(req[1]);
         if(req[1]<10){
             begin = 0;
             end = req[1];
@@ -521,61 +522,66 @@
         $("#pageIndex").html(Indexstr);
 
         $("#pageIndex li:eq(1) a:first").addClass("active");
-        window.scrollTo(0, 300);
     }
 
     function showDetail(id) {
         location.href = "product-details.html?pid=" + id;
     }
     function changePage(currPage) {
+         // alert("输入的页数为"+currPage);
         $.post("/user/petPages",{currPage:currPage},function (req) {
             var str = "";
             var data = req[0];
-
-            for (var i = 0; i < data.length; i++) {
+             // alert(req[1]);
+            for (var i = 0; i < req[1]; i++) {
+                // alert(i);
                 if (currPage==i){
+                    // alert("染色执行成功");
                     $("#pageIndex li:eq("+(i+1)+") a:first").addClass("active");
                 }else{
+                    // alert("去色成功");
                     $("#pageIndex li:eq("+(i+1)+") a:first").removeClass("active");
                 }
-
-                var img = data[i].pimg.substring(data[i].pimg.length - 36);
-                str += '<div class="product-width col-lg-6 col-xl-4 col-md-6 col-sm-6">\n' +
-                    '                                        <div class="product-wrapper mb-10">\n' +
-                    '                                            <div class="product-img">\n' +
-                    '                                                <a onclick="showDetail(' + data[i].id + ')">\n' +
-                    '                                                    <img src="/petImage/' + img + '" alt="">\n' +
-                    '                                                </a>\n' +
-                    '                                                <div class="product-action">\n' +
-                    '                                                    <a title="添加到购物车" onclick="addCard(' + data[i].id + ',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
-                    '                                                        <i class="ti-shopping-cart"></i>\n' +
-                    '                                                    </a>\n' +
-                    '                                                </div>\n' +
-                    '                                                <div class="product-action-wishlist">\n' +
-                    '                                                </div>\n' +
-                    '                                            </div>\n' +
-                    '                                            <div class="product-content">\n' +
-                    '                                                <h4><a href="product-details.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">' + data[i].pname + '</font></font></a></h4>\n' +
-                    '                                                <div class="product-price">\n' +
-                    '                                                    <span class="new">￥' + data[i].pprice + '</span>\n' +
-                    '                                                </div>\n' +
-                    '                                            </div>\n' +
-                    '                                            <div class="product-list-content">\n' +
-                    '                                                <h4><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">' + data[i].pname + '</font></font></a></h4>\n' +
-                    '                                                <div class="product-price">\n' +
-                    '                                                    <span class="new">￥' + data[i].pprice + '</span>\n' +
-                    '                                                </div>\n' +
-                    '                                                <div class="product-list-action">\n' +
-                    '                                                    <div class="product-list-action-left">\n' +
-                    '                                                        <a class="addtocart-btn" title="Add to cart" onclick="addCard(' + data[i].id + ',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')"><i class="ion-bag"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 添加到购物车</font></font></a>\n' +
-                    '                                                    </div>\n' +
-                    '                                                    <div class="product-list-action-right">\n' +
-                    '                                                    </div>\n' +
-                    '                                                </div>\n' +
-                    '                                            </div>\n' +
-                    '                                        </div>\n' +
-                    '                                    </div>\n';
             }
+                    // alert("执行填充函数");
+               for (var i = 0;i< data.length ; i++){
+                   var img = data[i].pimg.substring(data[i].pimg.length - 36);
+                   str += '<div class="product-width col-lg-6 col-xl-4 col-md-6 col-sm-6">\n' +
+                       '                                        <div class="product-wrapper mb-10">\n' +
+                       '                                            <div class="product-img">\n' +
+                       '                                                <a onclick="showDetail(' + data[i].id + ')">\n' +
+                       '                                                    <img src="/petImage/' + img + '" alt="">\n' +
+                       '                                                </a>\n' +
+                       '                                                <div class="product-action">\n' +
+                       '                                                    <a title="添加到购物车" onclick="addCard(\''+cookie.getCookie("uid")+'\',\'' + data[i].id + '\',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')">\n' +
+                       '                                                        <i class="ti-shopping-cart"></i>\n' +
+                       '                                                    </a>\n' +
+                       '                                                </div>\n' +
+                       '                                                <div class="product-action-wishlist">\n' +
+                       '                                                </div>\n' +
+                       '                                            </div>\n' +
+                       '                                            <div class="product-content">\n' +
+                       '                                                <h4><a href="product-details.html"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">' + data[i].pname + '</font></font></a></h4>\n' +
+                       '                                                <div class="product-price">\n' +
+                       '                                                    <span class="new">￥' + data[i].pprice + '</span>\n' +
+                       '                                                </div>\n' +
+                       '                                            </div>\n' +
+                       '                                            <div class="product-list-content">\n' +
+                       '                                                <h4><a href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">' + data[i].pname + '</font></font></a></h4>\n' +
+                       '                                                <div class="product-price">\n' +
+                       '                                                    <span class="new">￥' + data[i].pprice + '</span>\n' +
+                       '                                                </div>\n' +
+                       '                                                <div class="product-list-action">\n' +
+                       '                                                    <div class="product-list-action-left">\n' +
+                       '                                                        <a class="addtocart-btn" title="Add to cart" onclick="addCard(\''+cookie.getCookie("uid")+'\',\'' + data[i].id + '\',\'' + data[i].pname + '\',\'' + data[i].pprice + '\',1,\'' + data[i].pimg + '\')"><i class="ion-bag"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> 添加到购物车</font></font></a>\n' +
+                       '                                                    </div>\n' +
+                       '                                                    <div class="product-list-action-right">\n' +
+                       '                                                    </div>\n' +
+                       '                                                </div>\n' +
+                       '                                            </div>\n' +
+                       '                                        </div>\n' +
+                       '                                    </div>\n';
+               }
             $("#petPage").html(str);
         },"json");
 
@@ -594,10 +600,10 @@
     function nextPage() {
         // alert($("#pageIndex .active").html());
            var page = $("#pageIndex .active").html();   //定义一个当前页码,获取当前页码
-        // alert($("#pageIndex li").length);
         if ((parseInt(page)+ parseInt(1))>=$("#pageIndex li").length-1){//判断是否超过最后一页
-            // alert("这是最后页！");
+             // alert("这是最后页");
         }else {
+           // alert(page);
             changePage(page);
         }
     }

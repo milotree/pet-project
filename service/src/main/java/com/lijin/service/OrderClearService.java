@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class OrderClearService {
@@ -36,5 +37,19 @@ public class OrderClearService {
         OrderClear one = oderClearDao.getOne(oid);
         return one;
     }
+
+    /**
+     * 通过订单号查询详情信息
+     * @param oid
+     * @return
+     */
+    public OrderClear findAllByOrder(String oid){
+        Optional<OrderClear> byId = oderClearDao.findById(Integer.valueOf(oid));
+        OrderClear orderClear = byId.get();
+        return orderClear;
+    }
+
+
+
 
 }

@@ -361,7 +361,8 @@
         class="ti-arrow-up"></i></a>
 
 <script type="text/javascript">
-     $("#loginForm").submit(false);
+      $("#loginForm").submit(false);
+      $("#registerForm").submit(false);
     var rename = false;
 
     function checkTel() {
@@ -492,7 +493,12 @@
                         cookie.setCookie("uid", data.uid, 500);
                         goIndex();
                     } else {
-                        $("#logError").html("<font color='red' style='font-size: 12px;'>账号或密码错误</font>");
+                        if (data.msg!=null){
+                            $("#logError").html("<font color='red' style='font-size: 12px;'>"+data.msg+"</font>");
+                        }else{
+                            $("#logError").html("<font color='red' style='font-size: 12px;'>账号或密码错误</font>");
+                        }
+
                     }
                 }, "json");
 

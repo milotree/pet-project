@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -74,8 +75,28 @@ public class UserService {
         return user;
     }
 
+    /**
+     * 通过id进行用户查询（此为立刻加载）
+     * @param uid
+     * @return
+     */
     public User findUser(String uid){
         User user = userDao.getOne(Integer.valueOf(uid));
         return user;
     }
+
+    /**
+     * 后台查询所有用户
+     * @return
+     */
+    public List<User> findAllUser(){
+        List<User> all = userDao.findAll();
+        return all;
+    }
+
+    public void delUSer(Integer uid){
+        userDao.deleteById(uid);
+    }
+
+//    public User findByUname(String uname)
 }

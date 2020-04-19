@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>新增广告位</title>
+    <title>修改商品</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -148,7 +148,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="lafite-layui-btn" onclick="xadmin.del_tab()">取消</button>
+
                         <button lay-submit lay-filter="formDemo" class="lafite-layui-btn2 lafite_margin_left_20px"
                                 type="submit">保存
                         </button>
@@ -161,7 +161,7 @@
 </body>
 <script>
     var urll = "/manager/imgDel";
-
+    var index = parent.layer.getFrameIndex(window.name);
     /* history.replaceState(data,title,url)
     data：要设置的history.state的值，可以是任意类型的值，可根据此值进行判断执行想要的操作。
        title：现在大多数浏览器不支持或者忽略这个参数，最好用null代替。
@@ -178,116 +178,101 @@
         }
     }, "json");
     $.ajaxSettings.async = true;
-    //修改
-    // var params = location.search;
     var thisid = getUrlParam("pid");
-    $(function () {
-        $.post("/manager/change", {pid: thisid}, function (data) {
+    if (thisid!=null){
+        $(function () {
+            $.post("/manager/change", {pid: thisid}, function (data) {
 
-            //常规获取select下拉框的所有值 ！！！！！！都没用！！
-            // $("#ptype").find("option[value = '" + data.ptype + "']").prop("selected",true);
-            //$("#ptype").val("猫").prop("selected",true);
-
-
-            //这样才正确
-            var select1 = 'dd[lay-value=' + data.ptype + ']';
-            $('#ptype').siblings("div.layui-form-select").find('dl').find(select1).click();
-            var select2 = 'dd[lay-value=' + data.sname + ']';
-            $('#salers').siblings("div.layui-form-select").find('dl').find(select2).click();
-            var select3 = 'dd[lay-value=' + data.page + ']';
-            $('#page').siblings("div.layui-form-select").find('dl').find(select3).click();
-
-            $("#pnum").val(data.pnum);
-            $("#pname").val(data.pname);
-            $("#paddress").val(data.paddress);
-            $("#pprice").val(data.pprice);
-            var thismonth = new Date(data.ptime * 1000).getMonth() + 1;
-            if (thismonth < 10) {
-                var month = ("0" + thismonth).slice(-2);
-            } else {
-                var month = thismonth;
-            }
-            var thisday = new Date(data.ptime * 1000).getDate();
-            if (thisday < 10) {
-                var day = ("0" + thisday).slice(-2);
-            } else {
-                var day = thisday;
-            }
-            var today = new Date(data.ptime * 1000).getFullYear() + "-" + (month) + "-" + (day);
-            // alert(today);
-            // alert(new Date(timeeee).toLocaleDateString().replace(/\//g, "-"));
-            $("#ptime").val(today);
-            $('#demo1').attr('src', '/petImage/' + data.pimg.substring(data.pimg.length - 36));
-
-        }, "json");
-
-    });
+                //常规获取select下拉框的所有值 ！！！！！！都没用！！
+                $("#ptype").find("option[value = '" + data.ptype + "']").prop("selected",true);
+                $("#salers").find("option[value = '" + data.sname + "']").prop("selected",true);
+                $("#page").find("option[value = '" + data.page + "']").prop("selected",true);
+                //$("#ptype").val("猫").prop("selected",true);
 
 
-    layui.use(['laydate', 'form', 'upload'],
-        function () {
-            var $$ = layui.jquery
-                , upload = layui.upload;
-            var form = layui.form;
-            var laydate = layui.laydate;
+                //这样才正确,要两个一起用
+                var select1 = 'dd[lay-value=' + data.ptype + ']';
+                $('#ptype').siblings("div.layui-form-select").find('dl').find(select1).click();
+                var select2 = 'dd[lay-value=' + data.sname + ']';
+                $('#salers').siblings("div.layui-form-select").find('dl').find(select2).click();
+                var select3 = 'dd[lay-value=' + data.page + ']';
+                $('#page').siblings("div.layui-form-select").find('dl').find(select3).click();
 
-
-            //单图片上传
-            var uploadInst = upload.render({
-                elem: '#lafite_upload'
-                , url: '/manager/imgChange'
-                , method: 'post'
-                , field: 'pimg'
-                , before: function (obj) {
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function (index, file, result) {
-                        $('#demo1').attr('src', result); //图片链接（base64）
-                    });
+                $("#pnum").val(data.pnum);
+                $("#pname").val(data.pname);
+                $("#paddress").val(data.paddress);
+                $("#pprice").val(data.pprice);
+                var thismonth = new Date(data.ptime * 1000).getMonth() + 1;
+                if (thismonth < 10) {
+                    var month = ("0" + thismonth).slice(-2);
+                } else {
+                    var month = thismonth;
                 }
-                , done: function (res) {
-                    alert(res.msg);
+                var thisday = new Date(data.ptime * 1000).getDate();
+                if (thisday < 10) {
+                    var day = ("0" + thisday).slice(-2);
+                } else {
+                    var day = thisday;
                 }
-            });
+                var today = new Date(data.ptime * 1000).getFullYear() + "-" + (month) + "-" + (day);
+                // alert(today);
+                // alert(new Date(timeeee).toLocaleDateString().replace(/\//g, "-"));
+                $("#ptime").val(today);
+                $('#demo1').attr('src', '/petImage/' + data.pimg.substring(data.pimg.length - 36));
 
-            $("#myForm").submit(function () {
-                $.post("/manager/petFix", {
-                        pid: thisid,
-                        ptype: $("#ptype option:selected").val(),
-                        page: $("#page option:selected").val(),
-                        salers: $("#salers option:selected").val(),
-                        pnum: $("#pnum").val(),
-                        pname: $("#pname").val(),
-                        paddress: $("#paddress").val(),
-                        pprice: $("#pprice").val(),
-                        ptime: Date.parse($("#ptime").val())
-                    },
-                    function (data) {
-                        location.href = "adsense.html";
-                    })
-                return false;
-            })
+            }, "json");
 
-
-            /*用户-取消*/
-            /* function member_del() {
-                 layer.confirm('离开将不保存填写内容！',
-                 function(index) {
-                     //发异步删除数据
-                 });
-             }*/
         });
 
 
-    var a = 0;
+        layui.use(['laydate', 'form', 'upload'],
+            function () {
+                var $$ = layui.jquery
+                    , upload = layui.upload;
+                var form = layui.form;
+                var laydate = layui.laydate;
+
+
+                //单图片上传
+                var uploadInst = upload.render({
+                    elem: '#lafite_upload'
+                    , url: '/manager/imgChange'
+                    , method: 'post'
+                    , field: 'pimg'
+                    , before: function (obj) {
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function (index, file, result) {
+                            $('#demo1').attr('src', result); //图片链接（base64）
+                        });
+                    }
+                    , done: function (res) {
+                        alert(res.msg);
+                    }
+                });
+
+                $("#myForm").submit(function () {
+                    $.post("/manager/petFix", {
+                            pid: thisid,
+                            ptype: $("#ptype option:selected").val(),
+                            page: $("#page option:selected").val(),
+                            salers: $("#salers option:selected").val(),
+                            pnum: $("#pnum").val(),
+                            pname: $("#pname").val(),
+                            paddress: $("#paddress").val(),
+                            pprice: $("#pprice").val(),
+                            ptime: Date.parse($("#ptime").val())
+                        },
+                        function (data) {
+                            parent.layer.close(index);
+                            location.href = "adsense.html";
+                        })
+                    return false;
+                })
+            });
+    }
     var data = "";
-
-
     //////////////////////////刷新，加载其他页面执行函数/////////////////////////////////////
-
-
     navigator.sendBeacon("/manager/imgDel", data);
-
-
 </script>
 
 </html>

@@ -84,7 +84,6 @@
                                     <button type="submit" onclick="showpet()">
                                         <i class="icon-magnifier"></i>
                                     </button>
-
                                 </form>
                             </div>
                         </div>
@@ -574,21 +573,23 @@
     function buyMany() {
         $.post("/user/petDetails", {pid: thisid}, function (data) {
             var changeSize = $("#buyNum").val();
-            while (changeSize<=0||changeSize>data.pnum-changeSize){
+            if(changeSize<=0||changeSize>data.pnum){
                 changeSize= prompt("请输入规范的值?","请在这里输入数量");
+            }else {
+                $("#buyNum").val(changeSize);
+                $.post("/cart/addCartMany", {
+                    uid:cookie.getCookie("uid"),
+                    pid:data.id,
+                    pname:data.pname,
+                    pprice:data.pprice,
+                    pnum:changeSize,
+                    pimg:data.pimg
+                },function (data) {
+                    cartReflash(cookie.getCookie("uid"));//刷新购物车
+                });
             }
-            $("#buyNum").val(changeSize);
-            $.post("/cart/addCartMany", {
-                pid:data.id,
-                pname:data.pname,
-                pprice:data.pprice,
-                pnum:changeSize,
-                pimg:data.pimg
-            },function (data) {
-                cartReflash();//刷新购物车
-            });
+
         });
     }
-
 
 </script>

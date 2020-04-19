@@ -3,13 +3,8 @@ package com.lijin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lijin.entity.Information;
-import com.lijin.entity.Pet;
-import com.lijin.entity.PetAndSaler;
-import com.lijin.entity.User;
-import com.lijin.service.InformationService;
-import com.lijin.service.PetService;
-import com.lijin.service.UserService;
+import com.lijin.entity.*;
+import com.lijin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +24,24 @@ public class UserController {
     private PetService petService;
     @Autowired
     private InformationService informationService;
+    @Autowired
+    private OrderClearService orderClearService;
+    @Autowired
+    private OrderGoodsService orderGoodsService;
+    @Autowired
+    private SalerService salerService;
+
+    public void setSalerService(SalerService salerService) {
+        this.salerService = salerService;
+    }
+
+    public void setOrderGoodsService(OrderGoodsService orderGoodsService) {
+        this.orderGoodsService = orderGoodsService;
+    }
+
+    public void setOrderClearService(OrderClearService orderClearService) {
+        this.orderClearService = orderClearService;
+    }
 
     public void setInformationService(InformationService informationService) {
         this.informationService = informationService;
@@ -47,6 +60,7 @@ public class UserController {
     @RequestMapping(value = "regist", method = {RequestMethod.POST})
     public @ResponseBody
     String userRegister(@RequestBody User user) {
+        user.setUtype(0);
         boolean b = userService.saveUser(user);
         JSONObject jo = new JSONObject();
         System.out.println(user.toString());
@@ -90,18 +104,24 @@ public class UserController {
         System.out.println("登录方法执行了...");
         //通过电话和密码查询用户
         User user = userService.login(utel, upass);
+        JSONObject jo = new JSONObject();
+        if (user.getUtype()==1){
+            System.out.println("此号已被冻结");
+            jo.put("msg","此号因为非法交易被冻结");
+            return jo.toJSONString();
+        }
         /*Cookie cookie = new Cookie("cookieUser",  user.getUname());
         cookie.setMaxAge(0);
         cookie.setMaxAge(7 * 24 * 60 * 60);//设置cookie的最大生命周期为一周
         cookie.setPath("/");    //设置路径为全路径（这样写的好处是同一项目下的页面都可以访问该cookie）
         response.addCookie(cookie);*/
-        JSONObject jo = new JSONObject();
+
         System.out.println("返回到前端的用户数据为" + JSONObject.toJSONString(user));
         return JSONObject.toJSONString(user);
     }
 
     /*
-    登录方法
+    修改密码方法
      */
     @RequestMapping(value = "changePass", method = {
             RequestMethod.POST}, produces = "application/json;charset=UTF-8")
@@ -161,7 +181,6 @@ public class UserController {
 
         System.out.println("前台查询分页");
         List list = petService.petPage(Integer.valueOf(currPage));
-
         System.out.println(JSONObject.toJSONString(list));
        return JSONObject.toJSONString(list);
     }
@@ -230,5 +249,21 @@ public class UserController {
                 "</html>");
         out.close();
     }
+
+    /**
+     * 后台通过oid查询详情订单信息
+     * @param oid
+     * @return
+     */
+    @RequestMapping(value = "findOrderByOid", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderClear findOrderByOid(String oid){
+        OrderClear order = orderClearService.findAllByOrder(oid);
+        return order;
+    }
+
+
+
+
 
 }
