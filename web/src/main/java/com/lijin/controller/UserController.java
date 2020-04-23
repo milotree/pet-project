@@ -57,7 +57,7 @@ public class UserController {
 
     //注册方法
     @CrossOrigin
-    @RequestMapping(value = "regist", method = {RequestMethod.POST})
+    @RequestMapping(value = "regist", method = {RequestMethod.POST},produces="application/json; utf-8")
     public @ResponseBody
     String userRegister(@RequestBody User user) {
         user.setUtype(0);
@@ -155,7 +155,7 @@ public class UserController {
     /*
     /////查询指定id的宠物与卖家信息
      */
-    @RequestMapping(value = "petDetails")
+    @RequestMapping(value = "petDetails",method = RequestMethod.POST,produces="application/json; utf-8")
     public  PetAndSaler findPetAndSalers(String pid){
         System.out.println("查询当前卖家和宠物信息");
         PetAndSaler petAndSaler = petService.searchOneByCondition(Integer.valueOf(pid));
@@ -175,7 +175,7 @@ public class UserController {
     /*
     //////分页查询
      */
-    @RequestMapping(value = "petPages")
+    @RequestMapping(value = "petPages",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String petPages(String currPage){
 
@@ -188,7 +188,7 @@ public class UserController {
     /*
     ////////////////查询的指定类别的宠物信息,并分页
      */
-    @RequestMapping(value = "ptype", method = RequestMethod.POST)
+    @RequestMapping(value = "ptype", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String petPagesAndPtype(String currPage,String ptype){
         System.out.println("前台查询分页+类别");
@@ -199,7 +199,7 @@ public class UserController {
     /*
     //根据宠物名模糊查找并分页
      */
-    @RequestMapping(value = "searchName", method = RequestMethod.POST)
+    @RequestMapping(value = "searchName", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String searchByName(String currPage,String pname){
         System.out.println("前台查询分页+宠物名模糊查找");
@@ -214,7 +214,7 @@ public class UserController {
     /*
     /////根据宠物显示评论
      */
-    @RequestMapping(value = "findcomment", method = RequestMethod.POST)
+    @RequestMapping(value = "findcomment", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<Information> findAllComment(String pid){
         System.out.println("查询宠物评论");
@@ -224,30 +224,33 @@ public class UserController {
     /*
     保存对应的评论
      */
-    @RequestMapping(value = "savecomment", method = RequestMethod.POST)
+    @RequestMapping(value = "savecomment", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public void saveAllComment(HttpServletResponse response, String pid, String infoName, String infoContent) throws IOException {
         System.out.println(pid+infoName+infoContent);
-        Information information = new Information();
-        information.setInfoname(infoName);
-        information.setInfocontent(infoContent);
-        information.setPid(Integer.valueOf(pid));
-        informationService.saveComment(information);
-        response.setContentType("text/html; charset=utf-8");//千万不要忘了设编码,否则密钥报错!!!!!!
-        PrintWriter out = response.getWriter();
-        out.print("<html lang=\"en\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>Title</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "\n" +
-                "</body>\n" +
-                "<script>\n" +
-                "    location.href=\"http://localhost:8080/pet-user/product-details.html?pid="+pid+"\";\n" +
-                "</script>\n" +
-                "</html>");
-        out.close();
+        if (!"".equals(infoName)||!"".equals(infoContent)){
+            Information information = new Information();
+            information.setInfoname(infoName);
+            information.setInfocontent(infoContent);
+            information.setPid(Integer.valueOf(pid));
+            informationService.saveComment(information);
+            response.setContentType("text/html; charset=utf-8");//千万不要忘了设编码,否则密钥报错!!!!!!
+            PrintWriter out = response.getWriter();
+            out.print("<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>Title</title>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "\n" +
+                    "</body>\n" +
+                    "<script>\n" +
+                    "    location.href=\"http://localhost:8080/pet-user/product-details.html?pid="+pid+"\";\n" +
+                    "</script>\n" +
+                    "</html>");
+            out.close();
+        }
+
     }
 
     /**
@@ -255,7 +258,7 @@ public class UserController {
      * @param oid
      * @return
      */
-    @RequestMapping(value = "findOrderByOid", method = RequestMethod.POST)
+    @RequestMapping(value = "findOrderByOid", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public OrderClear findOrderByOid(String oid){
         OrderClear order = orderClearService.findAllByOrder(oid);

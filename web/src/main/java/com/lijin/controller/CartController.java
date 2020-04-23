@@ -1,5 +1,7 @@
 package com.lijin.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import com.alipay.api.AlipayClient;
@@ -76,7 +78,7 @@ public class CartController {
      * @param pimg
      * @return
      */
-    @RequestMapping(value = "addCart", method = RequestMethod.POST)
+    @RequestMapping(value = "addCart", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String redisAdd(String uid,String pid, String pname, String pprice, String pnum, String pimg) {
 
@@ -108,13 +110,16 @@ public class CartController {
             json = JSONObject.toJSONString(cart);      //将购物车详情表的对象转化为json字符串
             map.put(pid+onePet1.getPname()+uid,json);
             System.out.println("map信息存入1");
-            list2.add(map.get(pid+onePet1.getPname()+uid));
+            list2.add(json);
+            System.out.println("第一次存入list2的数据为"+list2.toString());
             userAndCart.setRedisCart(list2);//将redis的详情表的json数组存入总表中
             bigjson = JSONObject.toJSONString(userAndCart);//将总表数据转化为json
-            System.out.println("转化为list添加到redis中");
+            System.out.println("转化为list添加到redis中的bigjson是"+bigjson);
             redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
         }else {
             System.out.println("购物车对应的对象存在，其map为+"+map.get(pid+onePet1.getPname()+uid));
+//            userListJson = userListJson.replace("\\", "").replace("\"{", "{").replace("}\"", "}");
+            JSON.parse(userListJson);
             UserAndCart userAndCart = JSONObject.parseObject(userListJson, UserAndCart.class);//反序列化为购物车总表对象
             List<String> redisCart = userAndCart.getRedisCart();//得到购物车详情json数组
             if (map.get(pid+onePet1.getPname()+uid)!=null){//如果map中的数据不为空，则说明存在过此商品，宠物已存入json对象字符串中
@@ -139,7 +144,11 @@ public class CartController {
                     }
                     map.put(pid+onePet1.getPname()+uid,newjson);//无论是否修改，都把json
                     System.out.println("新的map信息存入");
-                    list3.add(map.get(pid+onePet1.getPname()+uid));
+                    if (map.get(pid+onePet1.getPname()+uid).substring(1)=="\""){
+                        list3.add(map.get(pid+onePet1.getPname()+uid).substring(1,map.get(pid+onePet1.getPname()+uid).length()-1));
+                    }else {
+                        list3.add(map.get(pid+onePet1.getPname()+uid));
+                    }
                 }
             } else {//map中不存在此数据，将商品信息添加至map和redis中，
                 System.out.println("不存在此map");
@@ -155,15 +164,18 @@ public class CartController {
                 for (String s : redisCart){
                     list3.add(s);
                 }
-                list3.add(map.get(pid+onePet1.getPname()+uid));//在将其加入新的购物车详情表中
+                list3.add(toJSONString);//在将其加入新的购物车详情表中
                 System.out.println("新的list3内容是"+list3.toString());
             }
             userAndCart.setRedisCart(list3);
+            System.out.println();
             bigjson = JSONObject.toJSONString(userAndCart);//将总表数据转化为json
             System.out.println("转化新的list3添加到redis中"+bigjson);
+            System.out.println("转化新的list3添加到redis中"+userAndCart.getRedisCart());
             redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
         }
         String newcart =  redisTemplate.boundValueOps(uid).get();
+        JSON.parse(newcart);
         UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
         System.out.println(userAndCart.getRedisCart().toString()+"这是新的购物车的信息");
         return userAndCart.getRedisCart().toString();
@@ -185,7 +197,7 @@ public class CartController {
      * @param pimg
      * @return
      */
-    @RequestMapping(value = "addCartMany", method = RequestMethod.POST)
+    @RequestMapping(value = "addCartMany", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String redisAddMany(String uid,String pid, String pname, String pprice, String pnum, String pimg) {
           System.out.println(pid + "--" + pname + "--" + pprice + "--" + pnum + "--" + pimg);
@@ -216,19 +228,22 @@ public class CartController {
             json = JSONObject.toJSONString(cart);      //将购物车详情表的对象转化为json字符串
             map.put(pid+onePet1.getPname()+uid,json);
             System.out.println("map信息存入1");
-            list2.add(map.get(pid+onePet1.getPname()+uid));
+            list2.add(json);
+            System.out.println("第一次存入list2的数据为"+list2.toString());
             userAndCart.setRedisCart(list2);//将redis的详情表的json数组存入总表中
             bigjson = JSONObject.toJSONString(userAndCart);//将总表数据转化为json
-            System.out.println("转化为list添加到redis中");
+            System.out.println("转化为list添加到redis中的bigjson是"+bigjson);
             redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
         }else {
             System.out.println("购物车对应的对象存在，其map为+"+map.get(pid+onePet1.getPname()+uid));
+            JSON.parse(userListJson);
             UserAndCart userAndCart = JSONObject.parseObject(userListJson, UserAndCart.class);//反序列化为购物车总表对象
             List<String> redisCart = userAndCart.getRedisCart();//得到购物车详情json数组
             if (map.get(pid+onePet1.getPname()+uid)!=null){//如果map中的数据不为空，则说明存在过此商品，宠物已存入json对象字符串中
                 System.out.println("购物车的map存在");
                 String newjson = "";
                 for (String s : redisCart) {    //遍历每个购物车json字符串数组
+                    JSON.parse(s);
                     RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
                     Pet onePet = petService.findOnePet(pid);//查询后台数据库对应的宠物信息
                     if (cart.getGoodsId()==Integer.valueOf(pid)) {//查找是否为所需商品
@@ -247,7 +262,11 @@ public class CartController {
                     }
                     map.put(pid+onePet1.getPname()+uid,newjson);//无论是否修改，都把json
                     System.out.println("新的map信息存入");
-                    list3.add(map.get(pid+onePet1.getPname()+uid));
+                    if (map.get(pid+onePet1.getPname()+uid).substring(1)=="\""){
+                        list3.add(map.get(pid+onePet1.getPname()+uid).substring(1,map.get(pid+onePet1.getPname()+uid).length()-1));
+                    }else {
+                        list3.add(map.get(pid+onePet1.getPname()+uid));
+                    }
                 }
             } else {//map中不存在此数据，将商品信息添加至map和redis中，
                 System.out.println("不存在此map");
@@ -263,7 +282,7 @@ public class CartController {
                 for (String s : redisCart){
                     list3.add(s);
                 }
-                list3.add(map.get(pid+onePet1.getPname()+uid));//在将其加入新的购物车详情表中
+                list3.add(map.get(pid+onePet1.getPname()+uid).substring(1,map.get(pid+onePet1.getPname()+uid).length()-1));//在将其加入新的购物车详情表中
                 System.out.println("新的list3内容是"+list3.toString());
             }
             userAndCart.setRedisCart(list3);
@@ -272,6 +291,7 @@ public class CartController {
             redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
         }
         String newcart =  redisTemplate.boundValueOps(uid).get();
+        JSON.parse(newcart);
         UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
         System.out.println(userAndCart.getRedisCart().toString()+"这是新的购物车的信息");
         return userAndCart.getRedisCart().toString();
@@ -332,10 +352,44 @@ public class CartController {
     }
 
 
+
+
     /*
-    删除购物车商品
+    登录显示所有的购物车信息
      */
-    @RequestMapping(value = "delCart", method = RequestMethod.POST)
+    @RequestMapping(value = "showCart", method = RequestMethod.POST,produces="application/json; utf-8")
+    @ResponseBody
+    public String redisShow(String uid) {
+        System.out.println("显示所有购物车商品，方法进行+"+uid);
+        if (uid!=null){
+            String newcart =  redisTemplate.boundValueOps(uid).get();
+            System.out.println("这是存储的信息"+newcart);
+            if (newcart!=null){
+//                String json = JSONObject.toJSONString(newcart);
+//                System.out.println(json);
+                UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
+                System.out.println(userAndCart.getRedisCart().toString()+"这是新的购物车的信息");
+
+                List<String> redisCart = userAndCart.getRedisCart();
+
+                for (String s : redisCart) {
+                    System.out.println(s+"这是购物车信息");
+
+                    RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
+                    map.put(cart.getGoodsId()+cart.getGoodsName()+uid,cart.toString());
+                }
+//                return userAndCart.getRedisCart().toString().substring(1,userAndCart.getRedisCart().toString().length()-1);
+                return userAndCart.getRedisCart().toString();
+            }else {
+                return null;
+            }}
+        return null;
+
+    }
+    /*
+      删除购物车商品
+       */
+    @RequestMapping(value = "delCart", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String redisDel(String pid,String uid) {
         System.out.println("删除指定购物车商品"+pid+";;;;"+uid);
@@ -343,14 +397,15 @@ public class CartController {
         Pet onePet1 = petService.findOnePet(pid);
         String userListJson = redisTemplate.boundValueOps(uid).get();
         System.out.println(userListJson+"存在uid对应的数据");
+        JSON.parse(userListJson);
         UserAndCart userAndCart = JSONObject.parseObject(userListJson, UserAndCart.class);//反序列化为购物车总表对象
         List<String> redisCart = userAndCart.getRedisCart();
         List list2 = new ArrayList();
         for (String s : redisCart) {
+            JSON.parse(s);
             RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
             if (Integer.valueOf(pid)==cart.getGoodsId()){
                 System.out.println("找到指定的购物车数据并删除成功");
-
             }else {
                 System.out.println(cart.getGoodsId());
                 list2.add(JSONObject.toJSONString(cart));
@@ -366,12 +421,6 @@ public class CartController {
             }
 
         }
-        /*for (String s1 : map.keySet()) {
-            if (s1.equals()){
-                System.out.println("删除指定的map的数据");
-                map.remove(s1);
-            }
-        }*/
         System.out.println(list2.toString()+"ddhgdhrdhd");
         userAndCart.setRedisCart(list2);
         System.out.println(list2.toString());
@@ -379,98 +428,71 @@ public class CartController {
         System.out.println("转化新的list3添加到redis中"+bigjson);
         redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
         String newcart =  redisTemplate.boundValueOps(uid).get();
+        JSON.parse(newcart);
         UserAndCart newuserAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
         System.out.println(newuserAndCart.getRedisCart().toString()+"这是新的购物车的信息");
         return newuserAndCart.getRedisCart().toString();
     }
-
-    /*
-    登录显示所有的购物车信息
-     */
-    @RequestMapping(value = "showCart", method = RequestMethod.POST)
-    @ResponseBody
-    public String redisShow(String uid) {
-        System.out.println("显示所有购物车商品，方法进行+"+uid);
-        if (uid!=null){
-            String newcart =  redisTemplate.boundValueOps(uid).get();
-            if (newcart!=null){
-                UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
-                System.out.println(userAndCart.getRedisCart().toString()+"这是新的购物车的信息");
-                List<String> redisCart = userAndCart.getRedisCart();
-                for (String s : redisCart) {
-                    RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
-                    map.put(cart.getGoodsId()+cart.getGoodsName()+uid,cart.toString());
-                }
-                return userAndCart.getRedisCart().toString();
-            }else {
-                return null;
-            }}
-        return null;
-
-    }
-
     /**
      * 指定用户清理删除所有购物车商品
      */
-    @RequestMapping(value = "DelAllCart", method = RequestMethod.POST)
+    @RequestMapping(value = "DelAllCart", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public void redisDelAll(String uid) {
         System.out.println("进入删除部分代码块+"+uid);
         String newcart =  redisTemplate.boundValueOps(uid).get();
+        JSON.parse(newcart);
         if (newcart!=null){
             UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
             List<String> redisCart = userAndCart.getRedisCart();
             List list2 = new ArrayList();
+
+
             for (String s : redisCart) {
+                JSON.parse(s);
                 RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
-                for (String s1 : map.keySet()) {
-                    System.out.println(s1);
-                    if (s1.equals(cart.getGoodsImg()+cart.getGoodsName()+uid)){
-                        System.out.println("删除指定的map的数据");
-                        map.remove(s1);
+                if (true){
+                    System.out.println("找到指定的购物车数据并删除成功");
+                }else {
+                    System.out.println(cart.getGoodsId());
+                    list2.add(JSONObject.toJSONString(cart));
+                    System.out.println(list2);
+                }
+                for (Map.Entry<String, String> item : map.entrySet()){
+                    System.out.println("这是循环遍历的map+"+item);
+                    System.out.println("这是要对比的地方"+item.getKey()+":"+(item.getKey().equals(cart.getGoodsId()+cart.getGoodsName()+uid)));
+                    if (item.getKey().equals(cart.getGoodsId()+cart.getGoodsName()+uid)){
+                        System.out.println("找打指定的map删除");
+                        map.remove(item.getKey());
                     }
+
                 }
             }
-            System.out.println("删除map成功");
-            List list = new ArrayList();
-            userAndCart.setRedisCart(list);
+            System.out.println(list2.toString()+"ddhgdhrdhd");
+            userAndCart.setRedisCart(list2);
+            System.out.println(list2.toString());
             String bigjson = JSONObject.toJSONString(userAndCart);//将总表数据转化为json
             System.out.println("转化新的list3添加到redis中"+bigjson);
             redisTemplate.boundValueOps(uid).set(bigjson);//转化为json字符串，在添加进redis中
-            System.out.println("删除所有购物车商品，方法进行");
+
         }else {
             System.out.println("为空");
         }
-       /* for (String s1 : map.keySet()) {
-            if (s1.equals(pid+uid)){
-                System.out.println("删除指定的map的数据");
-                map.remove(s1);
-            }
-        }*/
     }
-
-    /**
-     * 清理删除所有购物车商品
-     */
-  /*  @RequestMapping(value = "DelAllCartAll", method = RequestMethod.POST)
-    @ResponseBody
-    public void redisDelAll() {
-        Set<String> keys = redisTemplate.keys("*");
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
-    }*/
 
     /**
      * 发起商品购买请求(添加至用户订单)
      */
-    @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/addOrder", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String emptyCart(String uid, String time) {
         System.out.println("开始将购物车添加至订单");
         String newcart =  redisTemplate.boundValueOps(uid).get();
         UserAndCart userAndCart = JSONObject.parseObject(newcart, UserAndCart.class);//反序列化为购物车总表对象
-        List<String> redisCart = userAndCart.getRedisCart();//得到购物车详情json数组
+        System.out.println(userAndCart.getRedisCart().toString()+"这是新的购物车的信息");
+
+        List<String> redisCart = userAndCart.getRedisCart();
+
 
         JSONObject jo = new JSONObject();
         Integer sumPrice = 0;//用来获取总价格
@@ -492,8 +514,6 @@ public class CartController {
             petService.petSave(onePet);//修改存在的宠物信息
             list.add(supn);
         }
-        /*for (String key : keys) {
-        }*/
         OrderClear orderClear = new OrderClear();
         orderClear.setOprice(sumPrice);//设置总价
         orderClear.setOtime(time);//设置下单时间
@@ -503,10 +523,10 @@ public class CartController {
         OrderClear orderClear1 = orderClearService.saveOrderClear(orderClear);
         if (orderClear1 != null) {
             jo.put("msg", "提交订单成功");
-//            redisTemplate.delete(keys);
             if (newcart!=null){
                 List list2 = new ArrayList();
                 for (String s : redisCart) {
+                    JSON.parse(s);
                     RedisCart cart = JSONObject.parseObject(s, RedisCart.class);//反序列化为购物车详情表对象
                     for (Map.Entry<String, String> item : map.entrySet()){
                         System.out.println("这是循环遍历的map+"+item);
@@ -514,10 +534,8 @@ public class CartController {
                         if (item.getKey().equals(cart.getGoodsId()+cart.getGoodsName()+uid)){
                             System.out.println("找打指定的map删除");
                             String remove = map.remove(item.getKey());
-                            System.out.println(remove+"1111111111");
                         }
                     }
-
                 }
                 System.out.println("删除map成功");
                 List list3 = new ArrayList();
@@ -534,7 +552,7 @@ public class CartController {
     }
 
     //查询自身订单
-    @RequestMapping(value = "findSelfOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "findSelfOrder", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<OrderClear> findAllSelfOrder(String uid) {
         User user = userService.findUser(uid);
@@ -560,7 +578,7 @@ public class CartController {
         alipayRequest.setReturnUrl(AlipayConfig.return_url);
         alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
         //商户订单号，商户网站订单系统中唯一订单号，必填
-        String out_trade_no = String.valueOf(one.getOid());
+        String out_trade_no = String.valueOf(one.getOid()+"s"+new Date().getTime());
         //付款金额，必填
         String total_amount = String.valueOf(one.getOprice());
         //订单名称，必填
@@ -590,7 +608,7 @@ public class CartController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping(value = "/payloading", method = RequestMethod.GET)
+    @RequestMapping(value = "/payloading", method = RequestMethod.GET,produces="application/json; utf-8")
     public void payLoading(HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("支付成功, 进入异步通知接口...");
         response.setContentType("text/html; charset=utf-8");//千万不要忘了设编码,否则密钥报错!!!!!!
@@ -619,7 +637,7 @@ public class CartController {
 
         //交易状态
         System.out.println("交易成功");
-        OrderClear one = orderClearService.findOne(Integer.valueOf(out_trade_no));
+        OrderClear one = orderClearService.findOne(Integer.valueOf(out_trade_no.split("s")[0]));
         one.setOstatus(1);//设置为已付款状态
         orderClearService.saveOrderClear(one);
         OrderGoods orderGoods = new OrderGoods();
@@ -637,7 +655,7 @@ public class CartController {
                 "\n" +
                 "</body>\n" +
                 "<script>\n" +
-                "    location.href=\"http://localhost:8080/pet-user/checkout.html\";\n" +
+                "    location.href=\"http://47.100.60.48:8011/pet-user/checkout.html\";\n" +
                 "</script>\n" +
                 "</html>");
     }
@@ -647,7 +665,7 @@ public class CartController {
      * @param oid
      * @return
      */
-    @RequestMapping(value = "ChangeOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "ChangeOrder", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String ChangeOrder(String oid) {
         System.out.println("修改订单为已签收状态");
@@ -666,7 +684,7 @@ public class CartController {
      * @param pname
      * @throws IOException
      */
-    @RequestMapping(value = "findPet", method = RequestMethod.GET)
+    @RequestMapping(value = "findPet", method = RequestMethod.GET,produces="application/json; utf-8")
     public void findPet(HttpServletRequest request, HttpServletResponse response, String pname) throws IOException {
         System.out.println("查找指定宠物" + pname);
         response.setContentType("text/html; charset=utf-8");//千万不要忘了设编码,否则密钥报错!!!!!!
@@ -680,7 +698,7 @@ public class CartController {
                 "\n" +
                 "</body>\n" +
                 "<script>\n" +
-                "    location.href=\"http://localhost:8080/pet-user/shop-page.html?msg=" + pname + "\";\n" +
+                "    location.href=\"http://47.100.60.48:8011/pet-user/shop-page.html?msg=" + pname + "\";\n" +
                 "</script>\n" +
                 "</html>");
         out.close();
@@ -691,7 +709,7 @@ public class CartController {
      * @param oid
      * @return
      */
-    @RequestMapping(value = "cancelOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "cancelOrder", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String cancelOrder(String oid) {
         System.out.println("删除所有未付款的订单");

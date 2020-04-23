@@ -83,10 +83,10 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 <!--        thymeleaf用于跳转网页-->
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+        </dependency>-->
 
 
 

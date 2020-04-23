@@ -21,14 +21,10 @@
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space5" id="myform">
                                  <div class="layui-input-inline layui-show-xs-block">
-                                    <input type="text" name="username" placeholder="用户名" autocomplete="off" class="layui-input">
+                                    <input type="text" id="uid" name="uid" placeholder="用户编号" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <select name="contrller" id="select">
-                                        <option>用户状态</option>
-                                        <option>冻结</option>
-                                        <option>未冻结</option>
-                                    </select>
+                                    <input type="text" id="utel" name="utel" placeholder="电话号码" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-input-inline lafite_search layui-show-xs-block">
                                     <button class="layui-btn" lay-submit="" lay-filter="sreach">
@@ -145,7 +141,7 @@
                         var status = "";
                         for (var i = 0; i < data.length; i++) {
 
-                            if (data[i].utype == 1) {
+                            if (parseInt(data[i].utype) == 1) {
                                 status = "被冻结";
                             } else {
                                 status = "未被冻结";
@@ -182,7 +178,7 @@
 
                     //创建一个上传组件
                     $("#myform").submit(function () {
-                        $.post("/manager/findOrderByCondition",{ooid:$("#ooid").val(),uname:$("#uname").val()},function (data) {
+                        $.post("/manager/findByUidAndUtel",{uid:$("#uid").val(),utel:$("#utel").val()},function (data) {
                             laypage.render({
                                 elem: 'lafite_pages'               //这是元素的id，不能写成"#lafite_pages"
                                 , count: data.length            //数据总数

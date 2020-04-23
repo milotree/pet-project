@@ -75,6 +75,8 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+<!--        排除spring-boot-starter-web中的Tomcat-->
+
     </dependencies>
 
     <build>

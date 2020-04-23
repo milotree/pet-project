@@ -190,7 +190,7 @@
             </div>
             <div class="col-lg-6 col-md-6">
                 <div class="product-details-content" id="PetDetails">
-                    <h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">泰迪犬</font></font>
+                    <!--<h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">泰迪犬</font></font>
                     </h2>
                     <div class="product-rating">
                         <i class="ti-star theme-color"></i>
@@ -242,7 +242,7 @@
                                 <i class="ti-heart"></i>
                             </a>
                         </div>
-                    </div>
+                    </div>-->
 
                 </div>
             </div>
@@ -548,9 +548,11 @@
     },"json");
 
    function sendComment(){
-       $.post("/user/savecomment",{pid:thisid,infoName:cookie.getCookie("uname"),infoContent:$("#context").val()},function (data) {
-           $("#changePage").html(data);
-       });
+       if(cookie.getCookie("uname")){
+           $.post("/user/savecomment",{pid:thisid,infoName:cookie.getCookie("uname"),infoContent:$("#context").val()},function (data) {
+               $("#changePage").html(data);
+           });
+       }
    }
 
     var str = "";
@@ -571,7 +573,7 @@
 
     //购买一个商品多次
     function buyMany() {
-        $.post("/user/petDetails", {pid: thisid}, function (data) {
+        $.post("/user/petDetails", {pid: thisid/*,uid:cookie.getCookie("uname")*/}, function (data) {
             var changeSize = $("#buyNum").val();
             if(changeSize<=0||changeSize>data.pnum){
                 changeSize= prompt("请输入规范的值?","请在这里输入数量");

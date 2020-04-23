@@ -22,9 +22,9 @@ import java.util.*;
 public class ManagerController {
     @Autowired
     private ManagerService managerService;
-
+/*
     @Autowired
-    private ImgService imgService;
+    private ImgService imgService;*/
 
     @Autowired
     private SalerService salerService;
@@ -64,10 +64,10 @@ public class ManagerController {
         this.managerService = managerService;
     }
 
-    public void setImgService(ImgService imgService) {
+  /*  public void setImgService(ImgService imgService) {
         this.imgService = imgService;
     }
-
+*/
     /*
     /////////////////////执行管理员登录方法
      */
@@ -82,7 +82,7 @@ public class ManagerController {
     }
 
     //退出并清除cookie
-    @RequestMapping("logout")
+    @RequestMapping(value = "logout",method = RequestMethod.POST,produces="application/json; utf-8")
     public String logOut(HttpServletRequest request) {
         System.out.println("管理员账号退出方法执行了...");
         JSONObject jo = new JSONObject();
@@ -101,7 +101,7 @@ public class ManagerController {
     /*
     ///////////////////异步上传宠物图片
      */
-    @RequestMapping(value = "imgUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "imgUpload", method = RequestMethod.POST,produces="application/json; utf-8")
     public String imgUpload(@RequestParam(value = "pimg", required = true) MultipartFile photo, HttpServletRequest request) {
         JSONObject jo = new JSONObject();
         if (photo == null) {
@@ -123,7 +123,8 @@ public class ManagerController {
         }
         //获取项目根目录加上图片目录 static/imgages/upload/
         String savePath = Thread.currentThread().getContextClassLoader().getResource("") + "upload/";
-        savePath = savePath.substring(6);
+        System.out.println(savePath);
+        savePath = savePath.substring(9,19)+ "upload/";
         System.out.println(savePath);
         File savePathFile = new File(savePath);
         if (!savePathFile.exists()) {
@@ -132,7 +133,7 @@ public class ManagerController {
             savePathFile.mkdir();
         }
         String filename = UUID.randomUUID().toString().replace("-", "") + "." + suffix;
-        imgService.saveImg(savePath + filename);
+//        imgService.saveImg(savePath + filename);
         System.out.println("文件已保存");
         try {
             //将文件保存指定目录
@@ -163,7 +164,7 @@ public class ManagerController {
     /*
     修改商品时的图片修改
      */
-    @RequestMapping(value = "imgChange", method = RequestMethod.POST)
+    @RequestMapping(value = "imgChange", method = RequestMethod.POST,produces="application/json; utf-8")
     public Map<String, String> imgChange(@RequestParam(value = "pimg", required = true) MultipartFile photo, HttpServletRequest request) {
         Map<String, String> ret = new HashMap<String, String>();
 //        JSONObject jo = new JSONObject();
@@ -186,16 +187,21 @@ public class ManagerController {
         }
         //获取项目根目录加上图片目录 static/imgages/upload/
         String savePath = Thread.currentThread().getContextClassLoader().getResource("") + "upload/";
-        savePath = savePath.substring(6);
+        savePath = savePath.substring(9,19)+ "upload/";
         System.out.println(savePath);
         File savePathFile = new File(savePath);
+        savePathFile.setWritable(true, false);
         if (!savePathFile.exists()) {
             //若不存在该目录，则创建目录
-            System.out.println("创建了目录");
+
             savePathFile.mkdir();
+
+            System.out.println("创建了"+savePath+"目录");
+
         }
         String filename = UUID.randomUUID().toString().replace("-", "") + "." + suffix;
-        imgService.saveImg(savePath + filename);
+        System.out.println("目录为"+savePathFile);
+//        imgService.saveImg(savePath + filename);
         System.out.println("文件已保存");
         try {
             //将文件保存指定目录
@@ -227,7 +233,7 @@ public class ManagerController {
     /*
     //////////////////////////刷新或者退出时，删除异步上传存在的图片
      */
-    @RequestMapping(value = "imgDel", method = RequestMethod.POST)
+    @RequestMapping(value = "imgDel", method = RequestMethod.POST,produces="application/json; utf-8")
     public String imgDel(HttpServletRequest request) {
         System.out.println("删除异步上传存在的图片，代码块执行中======");
         JSONObject jo = new JSONObject();
@@ -374,7 +380,7 @@ public class ManagerController {
     /*
     ////////////////修改时查询的指定宠物信息
      */
-    @RequestMapping(value = "change", method = RequestMethod.POST)
+    @RequestMapping(value = "change", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public PetAndSaler petFix(String pid) {
         System.out.println("返回修改单个宠物的数据");
@@ -387,7 +393,7 @@ public class ManagerController {
      * 显示所有订单，按状态排序
      * @return
      */
-    @RequestMapping(value = "findOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "findOrder", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<OrderGoods> findAll(){
         List<OrderGoods> all = orderGoodsService.findAll();
@@ -400,7 +406,7 @@ public class ManagerController {
      * @param ooid
      * @return
      */
-    @RequestMapping(value = "changeOrderGoods",method = RequestMethod.POST)
+    @RequestMapping(value = "changeOrderGoods",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String changeOrderGoods(String ooid){
         System.out.println("修改brief订单状态");
@@ -418,7 +424,7 @@ public class ManagerController {
      * @param uname
      * @return
      */
-    @RequestMapping(value = "findOrderByCondition",method = RequestMethod.POST)
+    @RequestMapping(value = "findOrderByCondition",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<OrderGoods> findOrderByCondition(String ooid,String uname){
         System.out.println("接受到的ooid为：" + ooid + "===接受到的用户名为" + uname + "111");
@@ -446,7 +452,7 @@ public class ManagerController {
      * @param uname
      * @return
      */
-    @RequestMapping(value = "findComment",method = RequestMethod.POST)
+    @RequestMapping(value = "findComment",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public  List<PetAndComment> findComment(String pname,String uname){
         List<PetAndComment> all;
@@ -475,7 +481,7 @@ public class ManagerController {
      * @param infoid
      * @return
      */
-    @RequestMapping(value = "delComment",method = RequestMethod.POST)
+    @RequestMapping(value = "delComment",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String delComment(String infoid){
         informationService.delComment(Integer.valueOf(infoid));
@@ -488,26 +494,51 @@ public class ManagerController {
      * 查询所有用户信息
      * @return
      */
-    @RequestMapping(value = "findAllUser",method = RequestMethod.POST)
+    @RequestMapping(value = "findAllUser",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<User> findAllUser(){
         List<User> allUser = userService.findAllUser();
         return allUser;
     }
 
+    @RequestMapping(value = "findByUidAndUtel",method = RequestMethod.POST,produces="application/json; utf-8")
+    @ResponseBody
+    public List<User> findByUidAndUtel(String uid,String utel){
+        List<User> all;
+        if (!"".equals(uid)&&!"".equals(utel)&&uid!=null&&utel!=null){
+            System.out.println("通过用户id和用户账号查询");
+            all = userService.findAllUserBy(Integer.valueOf(uid),utel);
+        }else if (!"".equals(uid)&&uid!=null){
+            System.out.println("通过用户id");
+            all = userService.findAllUserBy(Integer.valueOf(uid));
+        }else if (!"".equals(utel)&&utel!=null){
+            System.out.println("通过用户账号查询");
+            all = userService.findAllUserBy(utel);
+        }else if ((uid==null&&utel==null)||("".equals(utel)&&"".equals(uid))){
+            System.out.println("未接收到任何参数");
+            all = userService.findAllUser();
+        }else {
+            System.out.println("啥也没传");
+            all = null;
+        }
+        return all;
+    }
+
+
     /**
      * 冻结用户
      * @param uid
      * @return
      */
-    @RequestMapping(value = "freeze",method = RequestMethod.POST)
+    @RequestMapping(value = "freeze",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String freezeUser(String uid){
         System.out.println("触发冻结用户操作");
         User user = userService.findUser(uid);
+        System.out.println("修改前的用户信息"+user);
         user.setUtype(1);
-        System.out.println("修改后的用户状态为"+user.getUtype());
         userService.saveUser(user);
+        System.out.println("修改后的用户信息"+user);
         JSONObject jo = new JSONObject();
         jo.put("msg","success");
         return jo.toJSONString();
@@ -518,7 +549,7 @@ public class ManagerController {
      * @param uid
      * @return
      */
-    @RequestMapping(value = "unfreeze",method = RequestMethod.POST)
+    @RequestMapping(value = "unfreeze",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String unfreezeUser(String uid){
         System.out.println("触发解冻用户操作");
@@ -536,7 +567,7 @@ public class ManagerController {
      * @param uid
      * @return
      */
-    @RequestMapping(value = "userdel",method = RequestMethod.POST)
+    @RequestMapping(value = "userdel",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String delUser(String uid){
         System.out.println("触发删除卖家操作");
@@ -554,7 +585,7 @@ public class ManagerController {
      * @param swechat
      * @return
      */
-    @RequestMapping(value = "saveSaler", method = RequestMethod.POST)
+    @RequestMapping(value = "saveSaler", method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String saveSaler(String sname,String swechat){
         Saler saler = new Saler();
@@ -571,7 +602,7 @@ public class ManagerController {
      * 查询所有卖家
      * @return
      */
-    @RequestMapping(value = "findAllSaler",method = RequestMethod.POST)
+    @RequestMapping(value = "findAllSaler",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<Saler> findAllSaler(){
         List<Saler> all = salerService.findAll();
@@ -583,7 +614,7 @@ public class ManagerController {
      * @param sname
      * @return
      */
-    @RequestMapping(value = "findAllSalerBySname",method = RequestMethod.POST)
+    @RequestMapping(value = "findAllSalerBySname",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public List<Saler> findAllSalerBySname(String sname){
         List<Saler> all;
@@ -600,7 +631,7 @@ public class ManagerController {
      * @param sid
      * @return
      */
-    @RequestMapping(value = "findSalerBySid",method = RequestMethod.POST)
+    @RequestMapping(value = "findSalerBySid",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public Saler findSalerBySid(String sid){
         Saler byId = salerService.findById(Integer.valueOf(sid));
@@ -614,7 +645,7 @@ public class ManagerController {
      * @param swechat
      * @return
      */
-    @RequestMapping(value = "fixSaler",method = RequestMethod.POST)
+    @RequestMapping(value = "fixSaler",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String fixSaler(String sid,String sname,String swechat){
         Saler byId = salerService.findById(Integer.valueOf(sid));
@@ -631,7 +662,7 @@ public class ManagerController {
      * @param sid
      * @return
      */
-    @RequestMapping(value = "delSaler",method = RequestMethod.POST)
+    @RequestMapping(value = "delSaler",method = RequestMethod.POST,produces="application/json; utf-8")
     @ResponseBody
     public String fixSaler(String sid){
         Saler byId = salerService.findById(Integer.valueOf(sid));

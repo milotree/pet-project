@@ -98,5 +98,34 @@ public class UserService {
         userDao.deleteById(uid);
     }
 
-//    public User findByUname(String uname)
+    /**
+     * 通过id查询用户
+     * @param uid
+     * @return
+     */
+    public  List<User> findAllUserBy(Integer uid){
+        List<User> byUid = userDao.findByUid(uid);
+        return byUid;
+    }
+
+    /**
+     * 通过电话（账号）进行查询
+     * @param utel
+     * @return
+     */
+    public  List<User> findAllUserBy(String utel){
+        List<User> byUtel = userDao.findByUtel(utel);
+        return byUtel;
+    }
+
+    /**
+     * 通过id和电话(账号)进行查询
+     * @param uid
+     * @param utel
+     * @return
+     */
+    public  List<User> findAllUserBy(Integer uid,String utel){
+        List<User> byUtelAndUid = userDao.findByUtelAndUid(utel, uid);
+        return byUtelAndUid;
+    }
 }

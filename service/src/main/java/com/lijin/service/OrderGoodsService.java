@@ -2,14 +2,11 @@ package com.lijin.service;
 
 import com.lijin.dao.OrderGoodsDao;
 import com.lijin.entity.OrderGoods;
-import com.lijin.entity.Pet;
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
 import java.util.List;
 
 @SpringBootApplication

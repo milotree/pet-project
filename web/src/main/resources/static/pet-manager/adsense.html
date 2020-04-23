@@ -158,11 +158,12 @@
                         , limits: [5, 10, 20]
                         , curr: pageConf.currentPage
                         , groups: 5                      //连续页码个数
+                        // , skin: '#c00' //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
                         , prev: '上一页'                 //上一页文本
                         , netx: '下一页'                 //下一页文本
                         , first: "首页"                      //首页文本
                         , last: "尾页"
-                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip','refresh']
                         , theme: '#D91715',
                         jump: function (obj, first) {
                             //渲染

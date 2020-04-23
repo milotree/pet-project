@@ -52,6 +52,7 @@ public class User {
                 ", utel='" + utel + '\'' +
                 ", uemail='" + uemail + '\'' +
                 ", upro='" + upro + '\'' +
+                ", utype=" + utype +
                 '}';
     }
 

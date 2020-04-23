@@ -28,7 +28,7 @@ function checkMyaccount() {
 
 
 function delCart(id,uid) {
-    alert(id+"++++++++"+uid);
+    // alert(id+"++++++++"+uid);
     $.post("/cart/delCart", {pid:id,uid:uid}, function (data) {
         tablefill(data, data.length);
 
