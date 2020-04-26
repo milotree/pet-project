@@ -11,6 +11,7 @@
         <datasource-mapping>
           <factory-entry name="Entities" />
           <factory-entry name="entityManagerFactory" />
+          <factory-entry name="service" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

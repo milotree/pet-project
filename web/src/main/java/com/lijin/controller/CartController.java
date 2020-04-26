@@ -599,7 +599,6 @@ public class CartController {
         OutputStream out = response.getOutputStream();
         out.write(content.getBytes("UTF-8"));
         out.close();
-//        response.getWriter().println(head + result + buttom);
     }
 
     /**
@@ -658,6 +657,7 @@ public class CartController {
                 "    location.href=\"http://47.100.60.48:8011/pet-user/checkout.html\";\n" +
                 "</script>\n" +
                 "</html>");
+        out.close();
     }
 
     /**

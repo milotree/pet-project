@@ -4,6 +4,9 @@ import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author milol
+ */
 @Configuration
 //@EnableScheduling
 public class CronScheduler {
